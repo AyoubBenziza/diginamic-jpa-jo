@@ -1,29 +1,26 @@
 package fr.diginamic;
 
-import fr.diginamic.entities.Sport;
-import fr.diginamic.entities.associatives.WordingEpreuve;
-import fr.diginamic.entities.associatives.WordingSport;
+import fr.diginamic.utils.Import;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-import java.util.Set;
+import java.util.Objects;
 
 public class Main {
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("jo");
+    private static final EntityManager em = emf.createEntityManager();
+    private static final String SPORTS_CSV = Objects.requireNonNull(Main.class.getClassLoader().getResource("sports.csv")).getPath();
+    private static final String EPREUVES_CSV = Objects.requireNonNull(Main.class.getClassLoader().getResource("epreuves.csv")).getPath();
+    private static final String ORGANISATIONS_CSV = Objects.requireNonNull(Main.class.getClassLoader().getResource("organisations.csv")).getPath();
+    private static final String EVENTS_CSV = Objects.requireNonNull(Main.class.getClassLoader().getResource("evenements.csv")).getPath();
+
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jo");
-        EntityManager em = emf.createEntityManager();
 
-        // Fetch the sport entity from the database
-        Sport sport = em.find(Sport.class, 1); // replace 1 with the id of the sport you want to fetch
-
-        // Access the wordings property of the sport
-        Set<WordingSport> wordingSports = sport.getWordings();
-
-        // Print the name of the sport in each language
-        for (WordingSport wordingSport : wordingSports) {
-            System.out.println("Language: " + wordingSport.getLangue().getName() + ", Sport name: " + wordingSport.getName());
-        }
+        Import.sportFile(em, SPORTS_CSV, Integer.MAX_VALUE);
+        Import.epreuveFile(em, EPREUVES_CSV, Integer.MAX_VALUE);
+        Import.organisationFile(em, ORGANISATIONS_CSV, Integer.MAX_VALUE);
+        Import.eventFile(em, EVENTS_CSV, Integer.MAX_VALUE);
 
         em.close();
         emf.close();

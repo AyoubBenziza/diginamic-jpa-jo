@@ -2,40 +2,110 @@ package fr.diginamic.entities;
 
 import jakarta.persistence.*;
 
+/**
+ * Represents an Event in the system
+ * Links to Organisation
+ *
+ * @Author AyoubBenziza
+ */
 @Entity
 @Table(name = "event")
 public class Event {
+    /**
+     * The unique identifier of the Event
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    /**
+     * The name of the Event
+     */
     private String nom;
 
-    private Character sexe;
-
-    private int age;
-
-    private int taille;
-
-    private int poids;
-
-    private String equipe;
-
-    private String cno;
-
-    private int annee;
-
-    private String saison;
-
-    private String ville;
-
+    /**
+     * The name of the champion
+     */
     private String champion;
 
+    /**
+     * The gender of the champion
+     */
+    private Character sexe;
+
+    /**
+     * The age of the champion
+     */
+    private int age;
+
+    /**
+     * The height of the champion
+     */
+    private int taille;
+
+    /**
+     * The weight of the champion
+     */
+    private int poids;
+
+    /**
+     * The team of the champion
+     */
+    private String equipe;
+
+    /**
+     * The country code of the champion
+     */
+    private String cno;
+
+    /**
+     * The year of the event
+     */
+    private int annee;
+
+    /**
+     * The season of the event
+     */
+    private String saison;
+
+    /**
+     * The city of the event
+     */
+    private String ville;
+
+    /**
+     * The medal of the champion (if any)
+     */
+    @Column(name = "medaille", nullable = true)
     private String medaille;
 
+    /**
+     * The organisation that organised the event
+     */
     @ManyToOne
     private Organisation organisation;
 
+    /**
+     * Default constructor.
+     */
+    public Event() {}
+
+    /**
+     * Constructor with parameters.
+     *
+     * @param nom name of the event
+     * @param sexe gender of the champion
+     * @param age age of the champion
+     * @param taille height of the champion
+     * @param poids weight of the champion
+     * @param equipe team of the champion
+     * @param cno country code of the champion
+     * @param annee year of the event
+     * @param saison season of the event
+     * @param ville city of the event
+     * @param champion name of the champion
+     * @param medaille medal of the champion (if any)
+     */
     public Event(String nom, Character sexe, int age, int taille, int poids, String equipe, String cno, int annee, String saison, String ville, String champion, String medaille) {
         this.nom = nom;
         this.sexe = sexe;
@@ -51,117 +121,254 @@ public class Event {
         this.medaille = medaille;
     }
 
-    public Event() {
-    }
-
+    /**
+     * Sets the unique identifier of this Event.
+     *
+     * @param id the unique identifier to set
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Getter for the unique identifier of this Event.
+     *
+     * @return the unique identifier
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets the name of this Event.
+     *
+     * @param nom the name to set
+     */
     public void setNom(String nom) {
         this.nom = nom;
     }
 
+    /**
+     * Getter for the name of this Event.
+     *
+     * @return the name
+     */
     public String getNom() {
         return nom;
     }
 
+    /**
+     * Sets the gender of the champion.
+     *
+     * @param sexe
+     */
     public void setSexe(Character sexe) {
         this.sexe = sexe;
     }
 
+    /**
+     * Getter for the gender of the champion.
+     *
+     * @return the gender
+     */
     public Character getSexe() {
         return sexe;
     }
 
+    /**
+     * Sets the age of the champion.
+     *
+     * @param age
+     */
     public void setAge(int age) {
         this.age = age;
     }
 
+    /**
+     * Getter for the age of the champion.
+     *
+     * @return the age
+     */
     public int getAge() {
         return age;
     }
 
+    /**
+     * Sets the height of the champion.
+     *
+     * @param taille
+     */
     public void setTaille(int taille) {
         this.taille = taille;
     }
 
+    /**
+     * Getter for the height of the champion.
+     *
+     * @return the height
+     */
     public int getTaille() {
         return taille;
     }
 
+    /**
+     * Sets the weight of the champion.
+     *
+     * @param poids
+     */
     public void setPoids(int poids) {
         this.poids = poids;
     }
 
+    /**
+     * Getter for the weight of the champion.
+     *
+     * @return the weight
+     */
     public int getPoids() {
         return poids;
     }
 
+    /**
+     * Sets the team of the champion.
+     *
+     * @param equipe
+     */
     public void setEquipe(String equipe) {
         this.equipe = equipe;
     }
 
+    /**
+     * Getter for the team of the champion.
+     *
+     * @return the team
+     */
     public String getEquipe() {
         return equipe;
     }
 
+    /**
+     * Sets the country code of the champion.
+     *
+     * @param cno
+     */
     public void setCno(String cno) {
         this.cno = cno;
     }
 
+    /**
+     * Getter for the country code of the champion.
+     *
+     * @return the country code
+     */
     public String getCno() {
         return cno;
     }
 
+    /**
+     * Sets the year of the event.
+     *
+     * @param annee
+     */
     public void setAnnee(int annee) {
         this.annee = annee;
     }
 
+    /**
+     * Getter for the year of the event.
+     *
+     * @return the year
+     */
     public int getAnnee() {
         return annee;
     }
 
+    /**
+     * Sets the season of the event.
+     *
+     * @param saison
+     */
     public void setSaison(String saison) {
         this.saison = saison;
     }
 
+    /**
+     * Getter for the season of the event.
+     *
+     * @return the season
+     */
     public String getSaison() {
         return saison;
     }
 
+    /**
+     * Sets the city of the event.
+     *
+     * @param ville
+     */
     public void setVille(String ville) {
         this.ville = ville;
     }
 
+    /**
+     * Getter for the city of the event.
+     *
+     * @return the city
+     */
     public String getVille() {
         return ville;
     }
 
+    /**
+     * Sets the name of the champion.
+     *
+     * @param champion
+     */
     public void setChampion(String champion) {
         this.champion = champion;
     }
 
+    /**
+     * Getter for the name of the champion.
+     *
+     * @return the name
+     */
     public String getChampion() {
         return champion;
     }
 
+    /**
+     * Sets the medal of the champion.
+     *
+     * @param medaille
+     */
     public void setMedaille(String medaille) {
         this.medaille = medaille;
     }
 
+    /**
+     * Getter for the medal of the champion.
+     *
+     * @return the medal
+     */
     public String getMedaille() {
         return medaille;
     }
 
+    /**
+     * Sets the organisation that organised the event.
+     *
+     * @param organisation
+     */
     public void setOrganisation(Organisation organisation) {
         this.organisation = organisation;
     }
 
+    /**
+     * Getter for the organisation that organised the event.
+     *
+     * @return the organisation
+     */
     public Organisation getOrganisation() {
         return organisation;
     }
