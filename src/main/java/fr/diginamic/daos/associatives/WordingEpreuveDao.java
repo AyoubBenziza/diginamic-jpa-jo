@@ -17,6 +17,13 @@ public class WordingEpreuveDao {
         this.wordingEpreuves.addAll(em.createQuery("SELECT w FROM WordingEpreuve w", WordingEpreuve.class).getResultList());
     }
 
+    public WordingEpreuve findByEpreuveName(String epreuveName) {
+        return wordingEpreuves.stream()
+                .filter(w -> w.getName().equals(epreuveName))
+                .findFirst()
+                .orElse(null);
+    }
+
     public boolean exists(String epreuveName, String languageName) {
         return wordingEpreuves.stream()
                 .anyMatch(w -> w.getName().equals(epreuveName) && w.getLangue().getName().equals(languageName));

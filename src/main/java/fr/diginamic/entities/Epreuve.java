@@ -36,8 +36,8 @@ public class Epreuve {
     /**
      * The organisation that organizes this Epreuve.
      */
-    @ManyToOne
-    private Organisation organisation;
+    @OneToMany(mappedBy = "epreuve")
+    private Set<Event> events = new HashSet<>();
 
     /**
      * Default constructor.
@@ -107,20 +107,45 @@ public class Epreuve {
     }
 
     /**
-     * Getter for the organisation that organizes this Epreuve.
+     * Sets the set of organisations that organize this Epreuve.
      *
-     * @return the organisation
+     * @param events the set of organisations to set
      */
-    public Organisation getOrganisation() {
-        return organisation;
+    public void setEvents(Set<Event> events) {
+        this.events = events;
     }
 
     /**
-     * Sets the organisation that organizes this Epreuve.
+     * Getter for the set of organisations that organize this Epreuve.
      *
-     * @param organisation the organisation to set
+     * @return the set of organisations
      */
-    public void setOrganisation(Organisation organisation) {
-        this.organisation = organisation;
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    /**
+     * Adds an organisation to the set of organisations that organize this Epreuve.
+     *
+     * @param event the organisation to add
+     */
+    public void addEvent(Event event) {
+        events.add(event);
+    }
+
+    /**
+     * Removes an organisation from the set of organisations that organize this Epreuve.
+     *
+     * @param event the organisation to remove
+     */
+    public void removeEvent(Event event) {
+        events.remove(event);
+    }
+
+    /**
+     * Clears the set of organisations that organize this Epreuve.
+     */
+    public void clearEvents() {
+        events.clear();
     }
 }

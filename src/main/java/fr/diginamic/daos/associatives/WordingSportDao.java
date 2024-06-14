@@ -13,13 +13,21 @@ public class WordingSportDao {
 
     public WordingSportDao(EntityManager em) {
         this.em = em;
+        this.wordingSports.addAll(em.createQuery("SELECT ws FROM WordingSport ws", WordingSport.class).getResultList());
     }
 
     public WordingSport findBySportName(String sportName) {
+        System.out.println(wordingSports);
         return wordingSports.stream()
                 .filter(w -> w.getName().equals(sportName))
                 .findFirst()
                 .orElse(null);
+//        return em.createQuery("SELECT ws FROM WordingSport ws WHERE ws.name = :name", WordingSport.class)
+//                .setParameter("name", sportName)
+//                .getResultList()
+//                .stream()
+//                .findFirst()
+//                .orElse(null);
     }
 
     public boolean exists(String sportName, String languageName) {

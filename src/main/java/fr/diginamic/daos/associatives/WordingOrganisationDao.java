@@ -13,6 +13,7 @@ public class WordingOrganisationDao {
 
     public WordingOrganisationDao(EntityManager em) {
         this.em = em;
+        this.wordingOrganisations.addAll(em.createQuery("SELECT wo FROM WordingOrganisation wo", WordingOrganisation.class).getResultList());
     }
 
     public boolean exists(String organisationName, String languageName) {

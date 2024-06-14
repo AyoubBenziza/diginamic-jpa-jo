@@ -2,6 +2,9 @@ package fr.diginamic.entities;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Represents an Event in the system
  * Links to Organisation
@@ -9,6 +12,7 @@ import jakarta.persistence.*;
  * @Author AyoubBenziza
  */
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "event")
 public class Event {
     /**
@@ -87,6 +91,9 @@ public class Event {
 
     @ManyToOne
     private Sport sport;
+
+    @ManyToOne
+    private Epreuve epreuve;
 
     /**
      * Default constructor.
@@ -392,5 +399,23 @@ public class Event {
      */
     public void setSport(Sport sport) {
         this.sport = sport;
+    }
+
+    /**
+     * Getter for the epreuve of the event.
+     *
+     * @return the epreuve
+     */
+    public Epreuve getEpreuve() {
+        return epreuve;
+    }
+
+    /**
+     * Sets the epreuve of the event.
+     *
+     * @param epreuve the epreuve to set
+     */
+    public void setEpreuve(Epreuve epreuve) {
+        this.epreuve = epreuve;
     }
 }

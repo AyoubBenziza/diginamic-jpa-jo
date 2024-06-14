@@ -46,7 +46,7 @@ public class Sport {
     /**
      * Sets the id of the Sport.
      *
-     * @param id
+     * @param id the id to set
      */
     public void setId(int id) {
         this.id = id;
@@ -139,6 +139,7 @@ public class Sport {
      */
     public void removeEvent(Event event) {
         events.remove(event);
+        event.setSport(null);
     }
 
     /**

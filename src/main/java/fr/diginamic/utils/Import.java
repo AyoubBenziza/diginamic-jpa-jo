@@ -4,12 +4,11 @@ import fr.diginamic.daos.*;
 import fr.diginamic.daos.associatives.WordingEpreuveDao;
 import fr.diginamic.daos.associatives.WordingOrganisationDao;
 import fr.diginamic.daos.associatives.WordingSportDao;
+import fr.diginamic.database.Connection;
 import fr.diginamic.entities.*;
 import fr.diginamic.entities.associatives.WordingEpreuve;
 import fr.diginamic.entities.associatives.WordingOrganisation;
 import fr.diginamic.entities.associatives.WordingSport;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
@@ -19,7 +18,16 @@ import java.io.Reader;
 
 public class Import {
 
-    public static void sportFile(EntityManager em, String path, int limit) {
+    private static final SportDao sportDao = Connection.getSportDao();
+    private static final EpreuveDao epreuveDao = Connection.getEpreuveDao();
+    private static final OrganisationDao organisationDao = Connection.getOrganisationDao();
+    private static final EventDao eventDao = Connection.getEventDao();
+    private static final LangueDao langueDao = Connection.getLangueDao();
+    private static final WordingSportDao wordingSportDao = Connection.getWordingSportDao();
+    private static final WordingEpreuveDao wordingEpreuveDao = Connection.getWordingEpreuveDao();
+    private static final WordingOrganisationDao wordingOrganisationDao = Connection.getWordingOrganisationDao();
+
+    public static void sportFile(String path, int limit) {
         try {
             Reader in = new FileReader(path);
             CSVFormat format = CSVFormat.Builder
@@ -31,13 +39,7 @@ public class Import {
 
             Iterable<CSVRecord> records = format.parse(in);
 
-            SportDao sportDao = new SportDao(em);
-            LangueDao langueDao = new LangueDao(em);
-            WordingSportDao wordingSportDao = new WordingSportDao(em);
-
-            EntityTransaction transaction = em.getTransaction();
-
-            transaction.begin();
+            Connection.begin();
 
             for(CSVRecord record : records) {
                 if (limit > 0) {
@@ -65,13 +67,13 @@ public class Import {
                     break;
                 }
             }
-            transaction.commit();
+            Connection.commit();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void epreuveFile(EntityManager em, String path, int limit) {
+    public static void epreuveFile(String path, int limit) {
         try {
             Reader in = new FileReader(path);
             CSVFormat format = CSVFormat.Builder
@@ -83,13 +85,7 @@ public class Import {
 
             Iterable<CSVRecord> records = format.parse(in);
 
-            EpreuveDao epreuveDao = new EpreuveDao(em);
-            LangueDao langueDao = new LangueDao(em);
-            WordingEpreuveDao wordingEpreuveDao = new WordingEpreuveDao(em);
-
-            EntityTransaction transaction = em.getTransaction();
-
-            transaction.begin();
+            Connection.begin();
 
             for(CSVRecord record : records) {
                 if (limit > 0) {
@@ -117,13 +113,13 @@ public class Import {
                     break;
                 }
             }
-            transaction.commit();
+            Connection.commit();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void organisationFile(EntityManager em, String path, int limit) {
+    public static void organisationFile(String path, int limit) {
         try {
             Reader in = new FileReader(path);
             Iterable<CSVRecord> records = CSVFormat.Builder
@@ -134,13 +130,7 @@ public class Import {
                     .build()
                     .parse(in);
 
-            OrganisationDao organisationDao = new OrganisationDao(em);
-            LangueDao langueDao = new LangueDao(em);
-            WordingOrganisationDao wordingOrganisationDao = new WordingOrganisationDao(em);
-
-            EntityTransaction transaction = em.getTransaction();
-
-            transaction.begin();
+            Connection.begin();
 
             for(CSVRecord record : records) {
                 if (limit > 0) {
@@ -177,38 +167,32 @@ public class Import {
                     break;
                 }
             }
-            transaction.commit();
+            Connection.commit();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void eventFile(EntityManager em, String path, int limit) {
+    public static void eventFile(String path, int limit) {
         try {
             Reader in = new FileReader(path);
             Iterable<CSVRecord> records = CSVFormat.Builder
                     .create(CSVFormat.EXCEL)
                     .setDelimiter(';')
-                    .setHeader("id","champion", "sexe", "age", "taille", "poids", "equipe", "cno", "games", "annee", "saison", "ville", "sport","nom", "medaille")
+                    .setHeader("id","champion", "sexe", "age", "taille", "poids", "equipe", "cno", "games", "annee", "saison", "ville", "sport","event", "medaille")
                     .setSkipHeaderRecord(true)
                     .build()
                     .parse(in);
 
-            EventDao eventDao = new EventDao(em);
-            OrganisationDao organisationDao = new OrganisationDao(em);
-            WordingSportDao wordingSportDao = new WordingSportDao(em);
-
-            EntityTransaction transaction = em.getTransaction();
-
-            transaction.begin();
+            Connection.begin();
 
             for(CSVRecord record : records) {
                 if (limit > 0) {
                     Event event = new Event();
-                    if (record.get("nom").isEmpty() || record.get("nom").equals("NA")){
+                    if (record.get("event").isEmpty() || record.get("event").equals("NA")){
                         event.setNom(null);
                     } else {
-                        event.setNom(record.get("nom"));
+                        event.setNom(record.get("event"));
                     }
 
                     if (record.get("sexe").isEmpty() || record.get("sexe").equals("NA")){
@@ -295,12 +279,17 @@ public class Import {
                             event.setSport(wordingSport.getSport());
                         }
                     }
-//                    System.out.println("IDENTIFIER: " + record.get("id") + " NOM: " + event.getNom());
+
+                    String epreuveName = record.get("event");
+                    WordingEpreuve wordingEpreuve = wordingEpreuveDao.findByEpreuveName(epreuveName);
+                    if (wordingEpreuve != null) {
+                        event.setEpreuve(wordingEpreuve.getEpreuve());
+                    }
                     eventDao.save(event);
                     limit--;
                 }
             }
-            transaction.commit();
+            Connection.commit();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

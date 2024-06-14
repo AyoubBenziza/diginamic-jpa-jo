@@ -103,4 +103,20 @@ public class WordingEpreuve {
     public Langue getLangue() {
         return langue;
     }
+
+    /**
+     * Sets the Epreuve of the WordingEpreuve.
+     * @param epreuve Epreuve of the WordingEpreuve
+     */
+    public void setEpreuve(Epreuve epreuve) {
+        this.epreuve = epreuve;
+    }
+
+    /**
+     * Getter of the Epreuve of the WordingEpreuve.
+     * @return epreuve
+     */
+    public Epreuve getEpreuve() {
+        return epreuve;
+    }
 }

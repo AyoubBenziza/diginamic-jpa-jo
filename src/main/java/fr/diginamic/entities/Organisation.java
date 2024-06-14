@@ -56,9 +56,6 @@ public class Organisation {
     @OneToMany(mappedBy = "organisation")
     private Set<Event> events;
 
-    @OneToMany(mappedBy = "organisation")
-    private Set<Epreuve> epreuves;
-
     /**
      * Default constructor.
      */
@@ -221,48 +218,5 @@ public class Organisation {
      */
     public void clearEvents() {
         events.clear();
-    }
-
-    /**
-     * Sets the epreuves associated with this Organisation.
-     *
-     * @param epreuves the epreuves to set
-     */
-    public void setEpreuves(Set<Epreuve> epreuves) {
-        this.epreuves = epreuves;
-    }
-
-    /**
-     * Getter for the epreuves associated with this Organisation.
-     *
-     * @return the epreuves
-     */
-    public Set<Epreuve> getEpreuves() {
-        return epreuves;
-    }
-
-    /**
-     * Adds an epreuve to the set of epreuves associated with this Organisation.
-     *
-     * @param epreuve the epreuve to add
-     */
-    public void addEpreuve(Epreuve epreuve) {
-        epreuves.add(epreuve);
-    }
-
-    /**
-     * Removes an epreuve from the set of epreuves associated with this Organisation.
-     *
-     * @param epreuve the epreuve to remove
-     */
-    public void removeEpreuve(Epreuve epreuve) {
-        epreuves.remove(epreuve);
-    }
-
-    /**
-     * Clears the set of epreuves associated with this Organisation.
-     */
-    public void clearEpreuves() {
-        epreuves.clear();
     }
 }
