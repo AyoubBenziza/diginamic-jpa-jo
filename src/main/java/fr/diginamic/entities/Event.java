@@ -46,7 +46,7 @@ public class Event {
     /**
      * The weight of the champion
      */
-    private int poids;
+    private float poids;
 
     /**
      * The team of the champion
@@ -84,6 +84,9 @@ public class Event {
      */
     @ManyToOne
     private Organisation organisation;
+
+    @ManyToOne
+    private Sport sport;
 
     /**
      * Default constructor.
@@ -160,7 +163,7 @@ public class Event {
     /**
      * Sets the gender of the champion.
      *
-     * @param sexe
+     * @param sexe the gender to set
      */
     public void setSexe(Character sexe) {
         this.sexe = sexe;
@@ -178,7 +181,7 @@ public class Event {
     /**
      * Sets the age of the champion.
      *
-     * @param age
+     * @param age the age to set
      */
     public void setAge(int age) {
         this.age = age;
@@ -196,7 +199,7 @@ public class Event {
     /**
      * Sets the height of the champion.
      *
-     * @param taille
+     * @param taille the height to set
      */
     public void setTaille(int taille) {
         this.taille = taille;
@@ -214,9 +217,9 @@ public class Event {
     /**
      * Sets the weight of the champion.
      *
-     * @param poids
+     * @param poids the weight to set
      */
-    public void setPoids(int poids) {
+    public void setPoids(float poids) {
         this.poids = poids;
     }
 
@@ -225,14 +228,14 @@ public class Event {
      *
      * @return the weight
      */
-    public int getPoids() {
+    public float getPoids() {
         return poids;
     }
 
     /**
      * Sets the team of the champion.
      *
-     * @param equipe
+     * @param equipe the team to set
      */
     public void setEquipe(String equipe) {
         this.equipe = equipe;
@@ -250,7 +253,7 @@ public class Event {
     /**
      * Sets the country code of the champion.
      *
-     * @param cno
+     * @param cno the country code to set
      */
     public void setCno(String cno) {
         this.cno = cno;
@@ -268,7 +271,7 @@ public class Event {
     /**
      * Sets the year of the event.
      *
-     * @param annee
+     * @param annee the year to set
      */
     public void setAnnee(int annee) {
         this.annee = annee;
@@ -286,7 +289,7 @@ public class Event {
     /**
      * Sets the season of the event.
      *
-     * @param saison
+     * @param saison the season to set
      */
     public void setSaison(String saison) {
         this.saison = saison;
@@ -304,7 +307,7 @@ public class Event {
     /**
      * Sets the city of the event.
      *
-     * @param ville
+     * @param ville the city to set
      */
     public void setVille(String ville) {
         this.ville = ville;
@@ -322,7 +325,7 @@ public class Event {
     /**
      * Sets the name of the champion.
      *
-     * @param champion
+     * @param champion the name to set
      */
     public void setChampion(String champion) {
         this.champion = champion;
@@ -340,7 +343,7 @@ public class Event {
     /**
      * Sets the medal of the champion.
      *
-     * @param medaille
+     * @param medaille the medal to set
      */
     public void setMedaille(String medaille) {
         this.medaille = medaille;
@@ -358,7 +361,7 @@ public class Event {
     /**
      * Sets the organisation that organised the event.
      *
-     * @param organisation
+     * @param organisation the organisation to set
      */
     public void setOrganisation(Organisation organisation) {
         this.organisation = organisation;
@@ -371,5 +374,23 @@ public class Event {
      */
     public Organisation getOrganisation() {
         return organisation;
+    }
+
+    /**
+     * Getter for the sport of the event.
+     *
+     * @return the sport
+     */
+    public Sport getSport() {
+        return sport;
+    }
+
+    /**
+     * Sets the sport of the event.
+     *
+     * @param sport the sport to set
+     */
+    public void setSport(Sport sport) {
+        this.sport = sport;
     }
 }

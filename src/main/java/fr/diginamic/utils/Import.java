@@ -13,7 +13,6 @@ import jakarta.persistence.EntityTransaction;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -190,12 +189,14 @@ public class Import {
             Iterable<CSVRecord> records = CSVFormat.Builder
                     .create(CSVFormat.EXCEL)
                     .setDelimiter(';')
-                    .setHeader("id","nom", "sexe", "age", "taille", "poids", "equipe", "cno", "games", "annee", "saison", "ville", "champion", "medaille")
+                    .setHeader("id","champion", "sexe", "age", "taille", "poids", "equipe", "cno", "games", "annee", "saison", "ville", "sport","nom", "medaille")
                     .setSkipHeaderRecord(true)
                     .build()
                     .parse(in);
 
             EventDao eventDao = new EventDao(em);
+            OrganisationDao organisationDao = new OrganisationDao(em);
+            WordingSportDao wordingSportDao = new WordingSportDao(em);
 
             EntityTransaction transaction = em.getTransaction();
 
@@ -203,63 +204,103 @@ public class Import {
 
             for(CSVRecord record : records) {
                 if (limit > 0) {
-                    String nom = record.get("nom").trim();
-                    if (nom.isEmpty() || nom.equals("NA")) {
-                        nom = null;
+                    Event event = new Event();
+                    if (record.get("nom").isEmpty() || record.get("nom").equals("NA")){
+                        event.setNom(null);
+                    } else {
+                        event.setNom(record.get("nom"));
                     }
-                    String sexe = record.get("sexe").trim();
-                    if (sexe.isEmpty() || sexe.equals("NA")) {
-                        sexe = null;
+
+                    if (record.get("sexe").isEmpty() || record.get("sexe").equals("NA")){
+                        event.setSexe(null);
+                    } else {
+                        event.setSexe(record.get("sexe").charAt(0));
                     }
-                    int age = 0;
-                    if (!record.get("age").isEmpty() || !record.get("age").equals("NA")) {
-                        age = Integer.parseInt(record.get("age").trim());
+
+                    if (record.get("age").isEmpty() || record.get("age").equals("NA")){
+                        event.setAge(0);
+                    } else {
+                        event.setAge(Integer.parseInt(record.get("age")));
                     }
-                    int taille = 0;
-                    if (!record.get("taille").isEmpty() || !record.get("taille").equals("NA")) {
-                        taille = Integer.parseInt(record.get("taille").trim());
+
+                    if (record.get("taille").isEmpty() || record.get("taille").equals("NA")){
+                        event.setTaille(0);
+                    } else {
+                        event.setTaille(Integer.parseInt(record.get("taille")));
                     }
-                    int poids = 0;
-                    if (!record.get("poids").isEmpty() || !record.get("poids").equals("NA")) {
-                        poids = Integer.parseInt(record.get("poids").trim());
+
+                    if (record.get("poids").isEmpty() || record.get("poids").equals("NA")){
+                        event.setPoids(0);
+                    } else {
+                        // Convert String to float
+                        event.setPoids(Float.parseFloat(record.get("poids")));
                     }
-                    String equipe = record.get("equipe").trim();
-                    if (equipe.isEmpty() || equipe.equals("NA")) {
-                        equipe = null;
+
+                    if (record.get("equipe").isEmpty() || record.get("equipe").equals("NA")){
+                        event.setEquipe(null);
+                    } else {
+                        event.setEquipe(record.get("equipe"));
                     }
-                    String cno = record.get("cno").trim();
-                    if (cno.isEmpty() || cno.equals("NA")) {
-                        cno = null;
+
+                    if (record.get("cno").isEmpty() || record.get("cno").equals("NA")){
+                        event.setCno(null);
+                    } else {
+                        String cno = record.get("cno");
+                        event.setCno(cno);
+
+                        // Check if an organisation exists with the given CIO code
+                        Organisation organisation = organisationDao.findByCioCode(cno);
+                        if (organisation != null) {
+                            // Organisation found, you can set it to the event
+                            event.setOrganisation(organisation);
+                        }
                     }
-                    int annee = 0;
-                    if (!record.get("annee").isEmpty() || !record.get("annee").equals("NA")) {
-                        annee = Integer.parseInt(record.get("annee").trim());
+
+                    if (record.get("annee").isEmpty() || record.get("annee").equals("NA")){
+                        event.setAnnee(0);
+                    } else {
+                        event.setAnnee(Integer.parseInt(record.get("annee")));
                     }
-                    String saison = record.get("saison").trim();
-                    if (saison.isEmpty() || saison.equals("NA")) {
-                        saison = null;
+
+                    if (record.get("saison").isEmpty() || record.get("saison").equals("NA")){
+                        event.setSaison(null);
+                    } else {
+                        event.setSaison(record.get("saison"));
                     }
-                    String ville = record.get("ville").trim();
-                    if (ville.isEmpty() || ville.equals("NA")) {
-                        ville = null;
+
+                    if (record.get("ville").isEmpty() || record.get("ville").equals("NA")){
+                        event.setVille(null);
+                    } else {
+                        event.setVille(record.get("ville"));
                     }
-                    String champion = record.get("champion").trim();
-                    if (champion.isEmpty() || champion.equals("NA")) {
-                        champion = null;
+
+                    if (record.get("champion").isEmpty() || record.get("champion").equals("NA")){
+                        event.setChampion(null);
+                    } else {
+                        event.setChampion(record.get("champion"));
                     }
-                    String medaille = record.get("medaille").trim();
-                    if (medaille.isEmpty() || medaille.equals("NA")) {
-                        medaille = null;
+
+                    if (record.get("medaille").isEmpty() || record.get("medaille").equals("NA")){
+                        event.setMedaille(null);
+                    } else {
+                        event.setMedaille(record.get("medaille"));
                     }
-                    System.out.println("IDENTIFIER: " + record.get("id") + " NOM: " + nom);
-                    Event event = new Event(nom, sexe.charAt(0), age, taille, poids, equipe, cno, annee, saison, ville, champion, medaille);
+
+                    if (record.get("sport").isEmpty() || record.get("sport").equals("NA")){
+                        event.setSport(null);
+                    } else {
+                        String sportName = record.get("sport");
+                        WordingSport wordingSport = wordingSportDao.findBySportName(sportName);
+                        if (wordingSport != null) {
+                            event.setSport(wordingSport.getSport());
+                        }
+                    }
+//                    System.out.println("IDENTIFIER: " + record.get("id") + " NOM: " + event.getNom());
                     eventDao.save(event);
                     limit--;
                 }
             }
             transaction.commit();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

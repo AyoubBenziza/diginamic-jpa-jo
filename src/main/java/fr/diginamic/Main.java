@@ -18,9 +18,9 @@ public class Main {
     public static void main(String[] args) {
 
         Import.sportFile(em, SPORTS_CSV, Integer.MAX_VALUE);
-        Import.epreuveFile(em, EPREUVES_CSV, Integer.MAX_VALUE);
         Import.organisationFile(em, ORGANISATIONS_CSV, Integer.MAX_VALUE);
-        Import.eventFile(em, EVENTS_CSV, Integer.MAX_VALUE);
+        Import.epreuveFile(em, EPREUVES_CSV, Integer.MAX_VALUE);
+        Import.eventFile(em, EVENTS_CSV, 100);
 
         em.close();
         emf.close();

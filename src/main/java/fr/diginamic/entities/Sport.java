@@ -30,6 +30,9 @@ public class Sport {
     @OneToMany(mappedBy = "sport")
     private Set<WordingSport> wordingSports = new HashSet<>();
 
+    @OneToMany(mappedBy = "sport")
+    private Set<Event> events = new HashSet<>();
+
     /**
      * Default constructor.
      */
@@ -42,6 +45,7 @@ public class Sport {
 
     /**
      * Sets the id of the Sport.
+     *
      * @param id
      */
     public void setId(int id) {
@@ -50,6 +54,7 @@ public class Sport {
 
     /**
      * Getter of the id of the Sport.
+     *
      * @return id
      */
     public int getId() {
@@ -58,7 +63,8 @@ public class Sport {
 
     /**
      * Sets the wordings of the Sport.
-     * @param wordingSports
+     *
+     * @param wordingSports the wordings to set
      */
     public void setWordings(Set<WordingSport> wordingSports) {
         this.wordingSports = wordingSports;
@@ -74,7 +80,8 @@ public class Sport {
 
     /**
      * Adds a wording to the Sport.
-     * @param wordingSport
+     *
+     * @param wordingSport the wording to add
      */
     public void addWording(WordingSport wordingSport) {
         wordingSports.add(wordingSport);
@@ -83,7 +90,8 @@ public class Sport {
 
     /**
      * Removes a wording from the Sport.
-     * @param wordingSport
+     *
+     * @param wordingSport the wording to remove
      */
     public void removeWording(WordingSport wordingSport) {
         wordingSports.remove(wordingSport);
@@ -94,5 +102,49 @@ public class Sport {
      */
     public void clearWordings() {
         wordingSports.clear();
+    }
+
+    /**
+     * Getter of the events of the Sport.
+     *
+     * @return events
+     */
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    /**
+     * Sets the events of the Sport.
+     *
+     * @param events the events to set
+     */
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
+
+    /**
+     * Adds an event to the Sport.
+     *
+     * @param event the event to add
+     */
+    public void addEvent(Event event) {
+        events.add(event);
+        event.setSport(this);
+    }
+
+    /**
+     * Removes an event from the Sport.
+     *
+     * @param event the event to remove
+     */
+    public void removeEvent(Event event) {
+        events.remove(event);
+    }
+
+    /**
+     * Clears all the events of the Sport.
+     */
+    public void clearEvents() {
+        events.clear();
     }
 }

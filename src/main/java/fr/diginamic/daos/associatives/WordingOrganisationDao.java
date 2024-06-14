@@ -3,22 +3,25 @@ package fr.diginamic.daos.associatives;
 import fr.diginamic.entities.associatives.WordingOrganisation;
 import jakarta.persistence.EntityManager;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class WordingOrganisationDao {
     private final EntityManager em;
+
+    private final Set<WordingOrganisation> wordingOrganisations = new HashSet<>();
 
     public WordingOrganisationDao(EntityManager em) {
         this.em = em;
     }
 
     public boolean exists(String organisationName, String languageName) {
-        Long count = em.createQuery("SELECT COUNT(w) FROM WordingOrganisation w WHERE w.name = :name AND w.langue.name = :langueName", Long.class)
-                .setParameter("name", organisationName)
-                .setParameter("langueName", languageName)
-                .getSingleResult();
-        return count > 0;
+        return wordingOrganisations.stream()
+                .anyMatch(w -> w.getName().equals(organisationName) && w.getLangue().getName().equals(languageName));
     }
 
     public void save(WordingOrganisation wordingOrganisation) {
+        wordingOrganisations.add(wordingOrganisation);
         em.persist(wordingOrganisation);
     }
 }

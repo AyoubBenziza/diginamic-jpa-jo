@@ -53,7 +53,8 @@ public class WordingSport {
 
     /**
      * Sets the name of the WordingSport.
-     * @param name
+     *
+     * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
@@ -61,6 +62,7 @@ public class WordingSport {
 
     /**
      * Getter of the name of the WordingSport.
+     *
      * @return name
      */
     public String getName() {
@@ -69,7 +71,8 @@ public class WordingSport {
 
     /**
      * Sets the id of the WordingSport.
-     * @param id
+     *
+     * @param id the id to set
      */
     public void setId(int id) {
         this.id = id;
@@ -77,6 +80,7 @@ public class WordingSport {
 
     /**
      * Getter of the id of the WordingSport.
+     *
      * @return id
      */
     public int getId() {
@@ -85,7 +89,8 @@ public class WordingSport {
 
     /**
      * Sets the language of the WordingSport.
-     * @param langue
+     *
+     * @param langue the language to set
      */
     public void setLangue(Langue langue) {
         this.langue = langue;
@@ -93,6 +98,7 @@ public class WordingSport {
 
     /**
      * Getter of the language of the WordingSport.
+     *
      * @return Langue
      */
     public Langue getLangue() {
@@ -101,10 +107,20 @@ public class WordingSport {
 
     /**
      * Sets the sport of the WordingSport.
-     * @param sport
+     *
+     * @param sport the sport to set
      */
 
     public void setSport(Sport sport) {
         this.sport = sport;
+    }
+
+    /**
+     * Getter of the sport of the WordingSport.
+     *
+     * @return Sport
+     */
+    public Sport getSport() {
+        return sport;
     }
 }

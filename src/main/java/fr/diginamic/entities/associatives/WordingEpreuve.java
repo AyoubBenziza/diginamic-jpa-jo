@@ -58,7 +58,7 @@ public class WordingEpreuve {
 
     /**
      * Sets the name of the WordingEpreuve.
-     * @param name
+     * @param name name of the WordingEpreuve
      */
     public void setName(String name) {
         this.name = name;
@@ -74,7 +74,7 @@ public class WordingEpreuve {
 
     /**
      * Sets the id of the WordingEpreuve.
-     * @param id
+     * @param id id of the WordingEpreuve
      */
     public void setId(int id) {
         this.id = id;

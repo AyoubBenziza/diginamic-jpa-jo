@@ -1,12 +1,7 @@
 package fr.diginamic.entities;
 
 import fr.diginamic.entities.associatives.WordingEpreuve;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +15,7 @@ import java.util.Set;
  * @author AyoubBenziza
  */
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "epreuve")
 public class Epreuve {
 
@@ -36,6 +32,12 @@ public class Epreuve {
      */
     @OneToMany(mappedBy = "epreuve")
     private Set<WordingEpreuve> wordingEpreuves = new HashSet<>();
+
+    /**
+     * The organisation that organizes this Epreuve.
+     */
+    @ManyToOne
+    private Organisation organisation;
 
     /**
      * Default constructor.
@@ -102,5 +104,23 @@ public class Epreuve {
      */
     public void clearWordings() {
         wordingEpreuves.clear();
+    }
+
+    /**
+     * Getter for the organisation that organizes this Epreuve.
+     *
+     * @return the organisation
+     */
+    public Organisation getOrganisation() {
+        return organisation;
+    }
+
+    /**
+     * Sets the organisation that organizes this Epreuve.
+     *
+     * @param organisation the organisation to set
+     */
+    public void setOrganisation(Organisation organisation) {
+        this.organisation = organisation;
     }
 }

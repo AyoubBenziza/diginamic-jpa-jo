@@ -25,13 +25,22 @@ public class Organisation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
+    /**
+     * The CIO code of the Organisation.
+     */
     @Column(name = "cio_code", length = 10, nullable = false)
     private String cio_code;
 
+    /**
+     * The ISO code of the Organisation.
+     */
     @Column(name = "iso_code", length = 10, nullable = true, unique = true)
     private String iso_code;
 
+    /**
+     * The obsolete status of the Organisation.
+     */
+    @Column(name = "obsolete", nullable = false)
     private boolean obsolete;
 
     /**
@@ -46,6 +55,9 @@ public class Organisation {
      */
     @OneToMany(mappedBy = "organisation")
     private Set<Event> events;
+
+    @OneToMany(mappedBy = "organisation")
+    private Set<Epreuve> epreuves;
 
     /**
      * Default constructor.
@@ -71,26 +83,56 @@ public class Organisation {
         return id;
     }
 
+    /**
+     * Sets the CIO code of this Organisation.
+     *
+     * @param cio_code the CIO code to set
+     */
     public void setCioCode(String cio_code) {
         this.cio_code = cio_code;
     }
 
+    /**
+     * Getter for the CIO code of this Organisation.
+     *
+     * @return the CIO code
+     */
     public String getCioCode() {
         return cio_code;
     }
 
+    /**
+     * Getter for the ISO code of this Organisation.
+     *
+     * @return the ISO code
+     */
     public String getIsoCode() {
         return iso_code;
     }
 
+    /**
+     * Sets the ISO code of this Organisation.
+     *
+     * @param iso_code the ISO code to set
+     */
     public void setIsoCode(String iso_code) {
         this.iso_code = iso_code;
     }
 
+    /**
+     * Getter for the obsolete status of this Organisation.
+     *
+     * @return the obsolete status
+     */
     public boolean isObsolete() {
         return obsolete;
     }
 
+    /**
+     * Sets the obsolete status of this Organisation.
+     *
+     * @param obsolete the obsolete status to set
+     */
     public void setObsolete(boolean obsolete) {
         this.obsolete = obsolete;
     }
@@ -179,5 +221,48 @@ public class Organisation {
      */
     public void clearEvents() {
         events.clear();
+    }
+
+    /**
+     * Sets the epreuves associated with this Organisation.
+     *
+     * @param epreuves the epreuves to set
+     */
+    public void setEpreuves(Set<Epreuve> epreuves) {
+        this.epreuves = epreuves;
+    }
+
+    /**
+     * Getter for the epreuves associated with this Organisation.
+     *
+     * @return the epreuves
+     */
+    public Set<Epreuve> getEpreuves() {
+        return epreuves;
+    }
+
+    /**
+     * Adds an epreuve to the set of epreuves associated with this Organisation.
+     *
+     * @param epreuve the epreuve to add
+     */
+    public void addEpreuve(Epreuve epreuve) {
+        epreuves.add(epreuve);
+    }
+
+    /**
+     * Removes an epreuve from the set of epreuves associated with this Organisation.
+     *
+     * @param epreuve the epreuve to remove
+     */
+    public void removeEpreuve(Epreuve epreuve) {
+        epreuves.remove(epreuve);
+    }
+
+    /**
+     * Clears the set of epreuves associated with this Organisation.
+     */
+    public void clearEpreuves() {
+        epreuves.clear();
     }
 }
