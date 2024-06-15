@@ -1,8 +1,6 @@
 package fr.diginamic.utils;
 
 import fr.diginamic.Main;
-import fr.diginamic.daos.EpreuveDao;
-import fr.diginamic.daos.OrganisationDao;
 import fr.diginamic.daos.SportDao;
 import fr.diginamic.database.Connection;
 
@@ -47,6 +45,7 @@ public class Menu {
                     importData();
                     break;
                 case 99:
+                    Connection.close();
                     System.out.println("Au revoir");
                     break;
                 default:
