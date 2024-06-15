@@ -18,14 +18,14 @@ import java.io.Reader;
 
 public class Import {
 
-    private static final SportDao sportDao = Connection.getSportDao();
-    private static final EpreuveDao epreuveDao = Connection.getEpreuveDao();
-    private static final OrganisationDao organisationDao = Connection.getOrganisationDao();
-    private static final EventDao eventDao = Connection.getEventDao();
-    private static final LangueDao langueDao = Connection.getLangueDao();
-    private static final WordingSportDao wordingSportDao = Connection.getWordingSportDao();
-    private static final WordingEpreuveDao wordingEpreuveDao = Connection.getWordingEpreuveDao();
-    private static final WordingOrganisationDao wordingOrganisationDao = Connection.getWordingOrganisationDao();
+    private static final SportDao sportDao = Connection.sportDao;
+    private static final EpreuveDao epreuveDao = Connection.epreuveDao;
+    private static final OrganisationDao organisationDao = Connection.organisationDao;
+    private static final EventDao eventDao = Connection.eventDao;
+    private static final LangueDao langueDao = Connection.langueDao;
+    private static final WordingSportDao wordingSportDao = Connection.wordingSportDao;
+    private static final WordingEpreuveDao wordingEpreuveDao = Connection.wordingEpreuveDao;
+    private static final WordingOrganisationDao wordingOrganisationDao = Connection.wordingOrganisationDao;
 
     public static void sportFile(String path, int limit) {
         try {

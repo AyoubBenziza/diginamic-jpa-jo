@@ -3,17 +3,16 @@ package fr.diginamic.daos;
 import fr.diginamic.entities.Sport;
 import jakarta.persistence.EntityManager;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 public class SportDao {
     private final EntityManager em;
 
-    private final Set<Sport> sports = new HashSet<>();
+    private final List<Sport> sports;
 
     public SportDao(EntityManager em) {
         this.em = em;
-        this.sports.addAll(em.createQuery("SELECT s FROM Sport s", Sport.class).getResultList());
+        this.sports = findAll();
     }
 
     public Sport findById(int id) {
@@ -21,6 +20,10 @@ public class SportDao {
                 .filter(s -> s.getId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<Sport> findAll() {
+        return em.createQuery("SELECT s FROM Sport s", Sport.class).getResultList();
     }
 
     public void save(Sport sport) {

@@ -22,12 +22,6 @@ public class WordingSportDao {
                 .filter(w -> w.getName().equals(sportName))
                 .findFirst()
                 .orElse(null);
-//        return em.createQuery("SELECT ws FROM WordingSport ws WHERE ws.name = :name", WordingSport.class)
-//                .setParameter("name", sportName)
-//                .getResultList()
-//                .stream()
-//                .findFirst()
-//                .orElse(null);
     }
 
     public boolean exists(String sportName, String languageName) {

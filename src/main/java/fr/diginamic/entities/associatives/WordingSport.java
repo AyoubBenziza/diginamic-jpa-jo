@@ -123,4 +123,9 @@ public class WordingSport {
     public Sport getSport() {
         return sport;
     }
+
+    @Override
+    public String toString() {
+        return name + "(" + langue.getName() +")";
+    }
 }
