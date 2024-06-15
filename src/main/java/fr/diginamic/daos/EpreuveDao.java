@@ -6,10 +6,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class EpreuveDao extends AbstractDao{
-    private final Set<Epreuve> epreuves = new HashSet<>();
+    private final Set<Epreuve> epreuves;
 
     public EpreuveDao() {
-        this.epreuves.addAll(em.createQuery("SELECT e FROM Epreuve e", Epreuve.class).getResultList());
+        epreuves = findAll();
+    }
+
+    public Set<Epreuve> findAll() {
+        return new HashSet<>(em.createQuery("SELECT e FROM Epreuve e", Epreuve.class).getResultList());
     }
 
     public Epreuve findById(int id) {

@@ -2,14 +2,15 @@ package fr.diginamic.daos;
 
 import fr.diginamic.entities.Sport;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SportDao extends AbstractDao {
 
-    private final List<Sport> sports;
+    private final Set<Sport> sports;
 
     public SportDao() {
-        this.sports = findAll();
+        sports = findAll();
     }
 
     public Sport findById(int id) {
@@ -19,8 +20,8 @@ public class SportDao extends AbstractDao {
                 .orElse(null);
     }
 
-    public List<Sport> findAll() {
-        return em.createQuery("SELECT s FROM Sport s", Sport.class).getResultList();
+    public Set<Sport> findAll() {
+        return new HashSet<>(em.createQuery("SELECT s FROM Sport s", Sport.class).getResultList());
     }
 
     public void save(Sport sport) {

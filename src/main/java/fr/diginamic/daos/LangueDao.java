@@ -7,10 +7,14 @@ import java.util.Set;
 
 public class LangueDao extends AbstractDao{
 
-    private final Set<Langue> langues = new HashSet<>();
+    private final Set<Langue> langues;
 
     public LangueDao() {
-        this.langues.addAll(em.createQuery("SELECT l FROM Langue l", Langue.class).getResultList());
+        langues = findAll();
+    }
+
+    public Set<Langue> findAll() {
+        return new HashSet<>(em.createQuery("SELECT l FROM Langue l", Langue.class).getResultList());
     }
 
     public Langue findByName(String name) {
