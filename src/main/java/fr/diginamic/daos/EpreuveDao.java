@@ -1,17 +1,14 @@
 package fr.diginamic.daos;
 
 import fr.diginamic.entities.Epreuve;
-import jakarta.persistence.EntityManager;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class EpreuveDao {
-    private final EntityManager em;
+public class EpreuveDao extends AbstractDao{
     private final Set<Epreuve> epreuves = new HashSet<>();
 
-    public EpreuveDao(EntityManager em) {
-        this.em = em;
+    public EpreuveDao() {
         this.epreuves.addAll(em.createQuery("SELECT e FROM Epreuve e", Epreuve.class).getResultList());
     }
 

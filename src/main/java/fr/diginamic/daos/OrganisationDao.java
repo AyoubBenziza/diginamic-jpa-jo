@@ -1,18 +1,14 @@
 package fr.diginamic.daos;
 
 import fr.diginamic.entities.Organisation;
-import jakarta.persistence.EntityManager;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class OrganisationDao {
-    private final EntityManager em;
-
+public class OrganisationDao extends AbstractDao {
     private final Set<Organisation> organisations = new HashSet<>();
 
-    public OrganisationDao(EntityManager em) {
-        this.em = em;
+    public OrganisationDao() {
         this.organisations.addAll(em.createQuery("SELECT o FROM Organisation o", Organisation.class).getResultList());
     }
 

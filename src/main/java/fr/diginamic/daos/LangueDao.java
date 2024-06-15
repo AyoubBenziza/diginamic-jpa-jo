@@ -1,18 +1,15 @@
 package fr.diginamic.daos;
 
 import fr.diginamic.entities.Langue;
-import jakarta.persistence.EntityManager;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class LangueDao {
-    private final EntityManager em;
+public class LangueDao extends AbstractDao{
 
     private final Set<Langue> langues = new HashSet<>();
 
-    public LangueDao(EntityManager em) {
-        this.em = em;
+    public LangueDao() {
         this.langues.addAll(em.createQuery("SELECT l FROM Langue l", Langue.class).getResultList());
     }
 

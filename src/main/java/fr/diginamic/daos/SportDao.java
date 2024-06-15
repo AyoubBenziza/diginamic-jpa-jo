@@ -1,17 +1,14 @@
 package fr.diginamic.daos;
 
 import fr.diginamic.entities.Sport;
-import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
-public class SportDao {
-    private final EntityManager em;
+public class SportDao extends AbstractDao {
 
     private final List<Sport> sports;
 
-    public SportDao(EntityManager em) {
-        this.em = em;
+    public SportDao() {
         this.sports = findAll();
     }
 

@@ -12,14 +12,18 @@ public class Connection {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("jo");
     private static final EntityManager em = emf.createEntityManager();
 
-    public static SportDao sportDao = new SportDao(em);
-    public static EpreuveDao epreuveDao = new EpreuveDao(em);
-    public static OrganisationDao organisationDao = new OrganisationDao(em);
-    public static LangueDao langueDao = new LangueDao(em);
-    public static EventDao eventDao = new EventDao(em);
-    public static WordingSportDao wordingSportDao = new WordingSportDao(em);
-    public static WordingEpreuveDao wordingEpreuveDao = new WordingEpreuveDao(em);
-    public static WordingOrganisationDao wordingOrganisationDao = new WordingOrganisationDao(em);
+    public static SportDao sportDao = new SportDao();
+    public static EpreuveDao epreuveDao = new EpreuveDao();
+    public static OrganisationDao organisationDao = new OrganisationDao();
+    public static LangueDao langueDao = new LangueDao();
+    public static EventDao eventDao = new EventDao();
+    public static WordingSportDao wordingSportDao = new WordingSportDao();
+    public static WordingEpreuveDao wordingEpreuveDao = new WordingEpreuveDao();
+    public static WordingOrganisationDao wordingOrganisationDao = new WordingOrganisationDao();
+
+    public static EntityManager getEntityManager() {
+        return em;
+    }
     
     public static void begin() {
         em.getTransaction().begin();

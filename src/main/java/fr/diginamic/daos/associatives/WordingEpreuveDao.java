@@ -1,19 +1,16 @@
 package fr.diginamic.daos.associatives;
 
+import fr.diginamic.daos.AbstractDao;
 import fr.diginamic.entities.associatives.WordingEpreuve;
-import jakarta.persistence.EntityManager;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class WordingEpreuveDao {
-
-    private final EntityManager em;
+public class WordingEpreuveDao extends AbstractDao {
 
     private final Set<WordingEpreuve> wordingEpreuves = new HashSet<>();
 
-    public WordingEpreuveDao(EntityManager em) {
-        this.em = em;
+    public WordingEpreuveDao() {
         this.wordingEpreuves.addAll(em.createQuery("SELECT w FROM WordingEpreuve w", WordingEpreuve.class).getResultList());
     }
 

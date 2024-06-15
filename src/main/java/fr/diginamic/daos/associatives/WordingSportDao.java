@@ -1,18 +1,16 @@
 package fr.diginamic.daos.associatives;
 
+import fr.diginamic.daos.AbstractDao;
 import fr.diginamic.entities.associatives.WordingSport;
-import jakarta.persistence.EntityManager;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class WordingSportDao {
-    private final EntityManager em;
+public class WordingSportDao extends AbstractDao {
 
     private final Set<WordingSport> wordingSports = new HashSet<>();
 
-    public WordingSportDao(EntityManager em) {
-        this.em = em;
+    public WordingSportDao() {
         this.wordingSports.addAll(em.createQuery("SELECT ws FROM WordingSport ws", WordingSport.class).getResultList());
     }
 
