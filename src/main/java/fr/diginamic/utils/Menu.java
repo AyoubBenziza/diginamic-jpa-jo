@@ -24,9 +24,19 @@ public class Menu {
     private static final String SPORTS_CSV = Objects.requireNonNull(Menu.class.getClassLoader().getResource("sports.csv")).getPath();
 
     /**
+     * Headers of the sports.csv file
+     */
+    private static final String[] headersSport = {"sport_en", "sport_fr"};
+
+    /**
      * Path to the epreuves.csv file
      */
     private static final String EPREUVES_CSV = Objects.requireNonNull(Menu.class.getClassLoader().getResource("epreuves.csv")).getPath();
+
+    /**
+     * Headers of the epreuves.csv file
+     */
+    private static final String[] headersEpreuve = {"epreuve_en", "epreuve_fr"};
 
     /**
      * Path to the organisations.csv file
@@ -34,9 +44,19 @@ public class Menu {
     private static final String ORGANISATIONS_CSV = Objects.requireNonNull(Menu.class.getClassLoader().getResource("organisations.csv")).getPath();
 
     /**
+     * Headers of the organisations.csv file
+     */
+    private static final String[] headersOrganisation = {"cio_code","organisation_fr","organisation_en","iso_code", "obsolete"};
+
+    /**
      * Path to the events.csv file
      */
     private static final String EVENTS_CSV = Objects.requireNonNull(Menu.class.getClassLoader().getResource("evenements.csv")).getPath();
+
+    /**
+     * Headers of the events.csv file
+     */
+    private static final String[] headersEvent = {"id","champion", "sexe", "age", "taille", "poids", "equipe", "cno", "games", "annee", "saison", "ville", "sport", "event", "medaille"};
 
     /**
      * {@link SportDao} sportDao
@@ -214,9 +234,9 @@ public class Menu {
      */
     public static void importData() {
         System.out.println("Import des données");
-        Import.sportFile(SPORTS_CSV, Integer.MAX_VALUE);
-        Import.epreuveFile(EPREUVES_CSV, Integer.MAX_VALUE);
-        Import.organisationFile(ORGANISATIONS_CSV, Integer.MAX_VALUE);
-        Import.eventFile(EVENTS_CSV, 200);
+        Import.sportFile(SPORTS_CSV, headersSport, Integer.MAX_VALUE);
+        Import.epreuveFile(EPREUVES_CSV, headersEpreuve, Integer.MAX_VALUE);
+        Import.organisationFile(ORGANISATIONS_CSV, headersOrganisation, Integer.MAX_VALUE);
+        Import.eventFile(EVENTS_CSV, headersEvent, 200);
     }
 }

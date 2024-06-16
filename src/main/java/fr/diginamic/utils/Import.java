@@ -15,6 +15,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.function.Consumer;
 
 /**
  * Class Import
@@ -52,9 +53,45 @@ public class Import {
     private static final WordingOrganisationDao wordingOrganisationDao = Connection.wordingOrganisationDao;
 
     /**
+     * Import data from a CSV file
+     *
+     * @param path Path to the CSV file
+     * @param headers Headers of the CSV file
+     * @param limit Number of records to import
+     * @param recordHandler Consumer to handle each record
+     */
+    public static void importFile(String path, String[] headers, int limit, Consumer<CSVRecord> recordHandler) {
+        try {
+            Reader in = new FileReader(path);
+            Iterable<CSVRecord> records = CSVFormat.Builder
+                    .create(CSVFormat.EXCEL)
+                    .setDelimiter(';')
+                    .setHeader(headers)
+                    .setSkipHeaderRecord(true)
+                    .build()
+                    .parse(in);
+
+            Connection.begin();
+
+            for (CSVRecord record : records) {
+                if (limit-- > 0) {
+                    recordHandler.accept(record);
+                } else {
+                    break;
+                }
+            }
+
+            Connection.commit();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    /**
      * Import sports from a CSV file
      *
      * @param path Path to the CSV file
+     * @param headers Headers of the CSV file
      * @param limit Number of records to import
      * @see Sport
      * @see Langue
@@ -64,56 +101,35 @@ public class Import {
      * @see WordingSportDao
      * @see Connection
      */
-    public static void sportFile(String path, int limit) {
-        try {
-            Reader in = new FileReader(path);
-            CSVFormat format = CSVFormat.Builder
-                    .create(CSVFormat.EXCEL)
-                    .setDelimiter(';')
-                    .setHeader("libelle_en", "libelle_fr")
-                    .setSkipHeaderRecord(true)
-                    .build();
+    public static void sportFile(String path, String[] headers, int limit) {
+        importFile(path, headers, limit, record -> {
+            Sport sport = new Sport();
+            sportDao.save(sport);
 
-            Iterable<CSVRecord> records = format.parse(in);
+            for (String header : headers) {
+                String sportName = record.get(header).trim();
+                String languageName = header.split("_")[1]; // assuming the header format is "libelle_xx"
 
-            Connection.begin();
+                Langue langue = langueDao.findByName(languageName);
+                if (langue == null) {
+                    langue = new Langue(languageName);
+                    langueDao.save(langue); // Fetch the persisted Langue
+                }
 
-            for(CSVRecord record : records) {
-                if (limit > 0) {
-                    Sport sport = new Sport();
-                    sportDao.save(sport);
-
-                    for (String header : format.getHeader()) {
-                        String sportName = record.get(header).trim();
-                        String languageName = header.split("_")[1]; // assuming the header format is "libelle_xx"
-
-                        Langue langue = langueDao.findByName(languageName);
-                        if (langue == null) {
-                            langue = new Langue(languageName);
-                            langueDao.save(langue); // Fetch the persisted Langue
-                        }
-
-                        if (!wordingSportDao.exists(sportName,languageName) && !sportName.isEmpty()) {
-                            WordingSport wordingSport = new WordingSport(sportName, langue, sport);
-                            wordingSportDao.save(wordingSport);
-                            sport.addWording(wordingSport);
-                        }
-                    }
-                    limit--;
-                } else {
-                    break;
+                if (!wordingSportDao.exists(sportName, languageName) && !sportName.isEmpty()) {
+                    WordingSport wordingSport = new WordingSport(sportName, langue, sport);
+                    wordingSportDao.save(wordingSport);
+                    sport.addWording(wordingSport);
                 }
             }
-            Connection.commit();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+        });
     }
 
     /**
      * Import epreuves from a CSV file
      *
      * @param path Path to the CSV file
+     * @param headers Headers of the CSV file
      * @param limit Number of records to import
      * @see Epreuve
      * @see Langue
@@ -123,56 +139,35 @@ public class Import {
      * @see WordingEpreuveDao
      * @see Connection
      */
-    public static void epreuveFile(String path, int limit) {
-        try {
-            Reader in = new FileReader(path);
-            CSVFormat format = CSVFormat.Builder
-                    .create(CSVFormat.EXCEL)
-                    .setDelimiter(';')
-                    .setHeader("event_en", "event_fr")
-                    .setSkipHeaderRecord(true)
-                    .build();
+    public static void epreuveFile(String path, String[] headers, int limit) {
+        importFile(path, headers, limit, record -> {
+            Epreuve epreuve = new Epreuve();
+            epreuveDao.save(epreuve);
 
-            Iterable<CSVRecord> records = format.parse(in);
+            for (String header : headers) {
+                String epreuveName = record.get(header).trim();
+                String languageName = header.split("_")[1]; // assuming the header format is "libelle_xx"
 
-            Connection.begin();
+                Langue langue = langueDao.findByName(languageName);
+                if (langue == null) {
+                    langue = new Langue(languageName);
+                    langueDao.save(langue); // Fetch the persisted Langue
+                }
 
-            for(CSVRecord record : records) {
-                if (limit > 0) {
-                    Epreuve epreuve = new Epreuve();
-                    epreuveDao.save(epreuve);
-
-                    for (String header : format.getHeader()) {
-                        String epreuveName = record.get(header).trim();
-                        String languageName = header.split("_")[1]; // assuming the header format is "libelle_xx"
-
-                        Langue langue = langueDao.findByName(languageName);
-                        if (langue == null) {
-                            langue = new Langue(languageName);
-                            langueDao.save(langue); // Fetch the persisted Langue
-                        }
-
-                        if (!wordingEpreuveDao.exists(epreuveName,languageName) && !epreuveName.isEmpty()) {
-                            WordingEpreuve wordingEpreuve = new WordingEpreuve(epreuveName, langue, epreuve);
-                            wordingEpreuveDao.save(wordingEpreuve);
-                            epreuve.addWording(wordingEpreuve);
-                        }
-                    }
-                    limit--;
-                } else {
-                    break;
+                if (!wordingEpreuveDao.exists(epreuveName, languageName) && !epreuveName.isEmpty()) {
+                    WordingEpreuve wordingEpreuve = new WordingEpreuve(epreuveName, langue, epreuve);
+                    wordingEpreuveDao.save(wordingEpreuve);
+                    epreuve.addWording(wordingEpreuve);
                 }
             }
-            Connection.commit();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+        });
     }
 
     /**
      * Import organisations from a CSV file
      *
      * @param path Path to the CSV file
+     * @param headers Headers of the CSV file
      * @param limit Number of records to import
      * @see Organisation
      * @see Langue
@@ -182,64 +177,48 @@ public class Import {
      * @see WordingOrganisationDao
      * @see Connection
      */
-    public static void organisationFile(String path, int limit) {
-        try {
-            Reader in = new FileReader(path);
-            Iterable<CSVRecord> records = CSVFormat.Builder
-                    .create(CSVFormat.EXCEL)
-                    .setDelimiter(';')
-                    .setHeader("cio_code","name_fr","name_en","iso_code", "obsolete")
-                    .setSkipHeaderRecord(true)
-                    .build()
-                    .parse(in);
-
-            Connection.begin();
-
-            for(CSVRecord record : records) {
-                if (limit > 0) {
-                    Organisation organisation = new Organisation();
-                    organisation.setCioCode(record.get("cio_code"));
-                    if (!record.get("iso_code").isEmpty()){
-                        organisation.setIsoCode(record.get("iso_code"));
-                    }
-                    if (!record.get("obsolete").isEmpty()){
-                        organisation.setObsolete(Boolean.parseBoolean(record.get("obsolete")));
-                    }
-                    organisationDao.save(organisation);
-
-                    String[] headersToCheck = {"name_fr", "name_en"};
-
-                    for (String header : headersToCheck) {
-                        String organisationName = record.get(header).trim();
-                        String languageName = header.split("_")[1]; // assuming the header format is "libelle_xx"
-
-                        Langue langue = langueDao.findByName(languageName);
-                        if (langue == null) {
-                            langue = new Langue(languageName);
-                            langueDao.save(langue); // Fetch the persisted Langue
-                        }
-
-                        if (!wordingOrganisationDao.exists(organisationName,languageName) && !organisationName.isEmpty()) {
-                            WordingOrganisation wordingOrganisation = new WordingOrganisation(organisationName, langue, organisation);
-                            wordingOrganisationDao.save(wordingOrganisation);
-                            organisation.addWording(wordingOrganisation);
-                        }
-                    }
-                    limit--;
-                } else {
-                    break;
+    public static void organisationFile(String path, String[] headers, int limit) {
+        importFile(path, headers, limit, record -> {
+            Organisation organisation = new Organisation();
+            organisation.setCioCode(record.get("cio_code"));
+            if (!record.get("iso_code").isEmpty()){
+                organisation.setIsoCode(record.get("iso_code"));
+            }
+            String obsoleteValue = record.get("obsolete").trim();
+            if (!obsoleteValue.isEmpty()){
+                if (obsoleteValue.equals("O")) {
+                    organisation.setObsolete(true);
+                } else if (obsoleteValue.equals("N")) {
+                    organisation.setObsolete(false);
                 }
             }
-            Connection.commit();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+            organisationDao.save(organisation);
+
+            String[] headersToCheck = {"organisation_fr", "organisation_en"};
+            for (String header : headersToCheck) {
+                String organisationName = record.get(header).trim();
+                String languageName = header.split("_")[1]; // assuming the header format is "libelle_xx"
+
+                Langue langue = langueDao.findByName(languageName);
+                if (langue == null) {
+                    langue = new Langue(languageName);
+                    langueDao.save(langue); // Fetch the persisted Langue
+                }
+
+                if (!wordingOrganisationDao.exists(organisationName,languageName) && !organisationName.isEmpty()) {
+                    WordingOrganisation wordingOrganisation = new WordingOrganisation(organisationName, langue, organisation);
+                    wordingOrganisationDao.save(wordingOrganisation);
+                    organisation.addWording(wordingOrganisation);
+                }
+            }
+        });
     }
 
     /**
      * Import events from a CSV file
      *
      * @param path Path to the CSV file
+     * @param headers Headers of the CSV file
      * @param limit Number of records to import
      * @see Event
      * @see Organisation
@@ -251,125 +230,107 @@ public class Import {
      * @see WordingEpreuveDao
      * @see Connection
      */
-    public static void eventFile(String path, int limit) {
-        try {
-            Reader in = new FileReader(path);
-            Iterable<CSVRecord> records = CSVFormat.Builder
-                    .create(CSVFormat.EXCEL)
-                    .setDelimiter(';')
-                    .setHeader("id","champion", "sexe", "age", "taille", "poids", "equipe", "cno", "games", "annee", "saison", "ville", "sport","event", "medaille")
-                    .setSkipHeaderRecord(true)
-                    .build()
-                    .parse(in);
+    public static void eventFile(String path, String[] headers, int limit) {
+        importFile(path, headers, limit, record -> {
+            Event event = new Event();
+            if (record.get("event").isEmpty() || record.get("event").equals("NA")){
+                event.setNom(null);
+            } else {
+                event.setNom(record.get("event"));
+            }
 
-            Connection.begin();
+            if (record.get("sexe").isEmpty() || record.get("sexe").equals("NA")){
+                event.setSexe(null);
+            } else {
+                event.setSexe(record.get("sexe").charAt(0));
+            }
 
-            for(CSVRecord record : records) {
-                if (limit > 0) {
-                    Event event = new Event();
-                    if (record.get("event").isEmpty() || record.get("event").equals("NA")){
-                        event.setNom(null);
-                    } else {
-                        event.setNom(record.get("event"));
-                    }
+            if (record.get("age").isEmpty() || record.get("age").equals("NA")){
+                event.setAge(0);
+            } else {
+                event.setAge(Integer.parseInt(record.get("age")));
+            }
 
-                    if (record.get("sexe").isEmpty() || record.get("sexe").equals("NA")){
-                        event.setSexe(null);
-                    } else {
-                        event.setSexe(record.get("sexe").charAt(0));
-                    }
+            if (record.get("taille").isEmpty() || record.get("taille").equals("NA")){
+                event.setTaille(0);
+            } else {
+                event.setTaille(Integer.parseInt(record.get("taille")));
+            }
 
-                    if (record.get("age").isEmpty() || record.get("age").equals("NA")){
-                        event.setAge(0);
-                    } else {
-                        event.setAge(Integer.parseInt(record.get("age")));
-                    }
+            if (record.get("poids").isEmpty() || record.get("poids").equals("NA")){
+                event.setPoids(0);
+            } else {
+                // Convert String to float
+                event.setPoids(Float.parseFloat(record.get("poids")));
+            }
 
-                    if (record.get("taille").isEmpty() || record.get("taille").equals("NA")){
-                        event.setTaille(0);
-                    } else {
-                        event.setTaille(Integer.parseInt(record.get("taille")));
-                    }
+            if (record.get("equipe").isEmpty() || record.get("equipe").equals("NA")){
+                event.setEquipe(null);
+            } else {
+                event.setEquipe(record.get("equipe"));
+            }
 
-                    if (record.get("poids").isEmpty() || record.get("poids").equals("NA")){
-                        event.setPoids(0);
-                    } else {
-                        // Convert String to float
-                        event.setPoids(Float.parseFloat(record.get("poids")));
-                    }
+            if (record.get("cno").isEmpty() || record.get("cno").equals("NA")){
+                event.setCno(null);
+            } else {
+                String cno = record.get("cno");
+                event.setCno(cno);
 
-                    if (record.get("equipe").isEmpty() || record.get("equipe").equals("NA")){
-                        event.setEquipe(null);
-                    } else {
-                        event.setEquipe(record.get("equipe"));
-                    }
-
-                    if (record.get("cno").isEmpty() || record.get("cno").equals("NA")){
-                        event.setCno(null);
-                    } else {
-                        String cno = record.get("cno");
-                        event.setCno(cno);
-
-                        // Check if an organisation exists with the given CIO code
-                        Organisation organisation = organisationDao.findByCioCode(cno);
-                        if (organisation != null) {
-                            // Organisation found, you can set it to the event
-                            event.setOrganisation(organisation);
-                        }
-                    }
-
-                    if (record.get("annee").isEmpty() || record.get("annee").equals("NA")){
-                        event.setAnnee(0);
-                    } else {
-                        event.setAnnee(Integer.parseInt(record.get("annee")));
-                    }
-
-                    if (record.get("saison").isEmpty() || record.get("saison").equals("NA")){
-                        event.setSaison(null);
-                    } else {
-                        event.setSaison(record.get("saison"));
-                    }
-
-                    if (record.get("ville").isEmpty() || record.get("ville").equals("NA")){
-                        event.setVille(null);
-                    } else {
-                        event.setVille(record.get("ville"));
-                    }
-
-                    if (record.get("champion").isEmpty() || record.get("champion").equals("NA")){
-                        event.setChampion(null);
-                    } else {
-                        event.setChampion(record.get("champion"));
-                    }
-
-                    if (record.get("medaille").isEmpty() || record.get("medaille").equals("NA")){
-                        event.setMedaille(null);
-                    } else {
-                        event.setMedaille(record.get("medaille"));
-                    }
-
-                    if (record.get("sport").isEmpty() || record.get("sport").equals("NA")){
-                        event.setSport(null);
-                    } else {
-                        String sportName = record.get("sport");
-                        WordingSport wordingSport = wordingSportDao.findBySportName(sportName);
-                        if (wordingSport != null) {
-                            event.setSport(wordingSport.getSport());
-                        }
-                    }
-
-                    String epreuveName = record.get("event");
-                    WordingEpreuve wordingEpreuve = wordingEpreuveDao.findByEpreuveName(epreuveName);
-                    if (wordingEpreuve != null) {
-                        event.setEpreuve(wordingEpreuve.getEpreuve());
-                    }
-                    eventDao.save(event);
-                    limit--;
+                // Check if an organisation exists with the given CIO code
+                Organisation organisation = organisationDao.findByCioCode(cno);
+                if (organisation != null) {
+                    // Organisation found, you can set it to the event
+                    event.setOrganisation(organisation);
                 }
             }
-            Connection.commit();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+            if (record.get("annee").isEmpty() || record.get("annee").equals("NA")){
+                event.setAnnee(0);
+            } else {
+                event.setAnnee(Integer.parseInt(record.get("annee")));
+            }
+
+            if (record.get("saison").isEmpty() || record.get("saison").equals("NA")){
+                event.setSaison(null);
+            } else {
+                event.setSaison(record.get("saison"));
+            }
+
+            if (record.get("ville").isEmpty() || record.get("ville").equals("NA")){
+                event.setVille(null);
+            } else {
+                event.setVille(record.get("ville"));
+            }
+
+            if (record.get("champion").isEmpty() || record.get("champion").equals("NA")){
+                event.setChampion(null);
+            } else {
+                event.setChampion(record.get("champion"));
+            }
+
+            if (record.get("medaille").isEmpty() || record.get("medaille").equals("NA")){
+                event.setMedaille(null);
+            } else {
+                event.setMedaille(record.get("medaille"));
+            }
+
+            if (record.get("sport").isEmpty() || record.get("sport").equals("NA")){
+                event.setSport(null);
+            } else {
+                String sportName = record.get("sport");
+                WordingSport wordingSport = wordingSportDao.findBySportName(sportName);
+                if (wordingSport != null) {
+                    event.setSport(wordingSport.getSport());
+                }
+            }
+
+            String epreuveName = record.get("event");
+            WordingEpreuve wordingEpreuve = wordingEpreuveDao.findByEpreuveName(epreuveName);
+            if (wordingEpreuve != null) {
+                event.setEpreuve(wordingEpreuve.getEpreuve());
+            }
+
+            eventDao.save(event);
+        });
     }
 }
