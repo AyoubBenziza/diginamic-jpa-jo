@@ -16,6 +16,30 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
+/**
+ * Class Import
+ * Each method imports data from a specific CSV file
+ *
+ * @see Connection
+ * @see Sport
+ * @see Epreuve
+ * @see Organisation
+ * @see Event
+ * @see Langue
+ * @see WordingSport
+ * @see WordingEpreuve
+ * @see WordingOrganisation
+ * @see SportDao
+ * @see EpreuveDao
+ * @see OrganisationDao
+ * @see EventDao
+ * @see LangueDao
+ * @see WordingSportDao
+ * @see WordingEpreuveDao
+ * @see WordingOrganisationDao
+ *
+ * @author AyoubBenziza
+ */
 public class Import {
 
     private static final SportDao sportDao = Connection.sportDao;
@@ -27,6 +51,19 @@ public class Import {
     private static final WordingEpreuveDao wordingEpreuveDao = Connection.wordingEpreuveDao;
     private static final WordingOrganisationDao wordingOrganisationDao = Connection.wordingOrganisationDao;
 
+    /**
+     * Import sports from a CSV file
+     *
+     * @param path Path to the CSV file
+     * @param limit Number of records to import
+     * @see Sport
+     * @see Langue
+     * @see WordingSport
+     * @see SportDao
+     * @see LangueDao
+     * @see WordingSportDao
+     * @see Connection
+     */
     public static void sportFile(String path, int limit) {
         try {
             Reader in = new FileReader(path);
@@ -69,10 +106,23 @@ public class Import {
             }
             Connection.commit();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
 
+    /**
+     * Import epreuves from a CSV file
+     *
+     * @param path Path to the CSV file
+     * @param limit Number of records to import
+     * @see Epreuve
+     * @see Langue
+     * @see WordingEpreuve
+     * @see EpreuveDao
+     * @see LangueDao
+     * @see WordingEpreuveDao
+     * @see Connection
+     */
     public static void epreuveFile(String path, int limit) {
         try {
             Reader in = new FileReader(path);
@@ -115,10 +165,23 @@ public class Import {
             }
             Connection.commit();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
 
+    /**
+     * Import organisations from a CSV file
+     *
+     * @param path Path to the CSV file
+     * @param limit Number of records to import
+     * @see Organisation
+     * @see Langue
+     * @see WordingOrganisation
+     * @see OrganisationDao
+     * @see LangueDao
+     * @see WordingOrganisationDao
+     * @see Connection
+     */
     public static void organisationFile(String path, int limit) {
         try {
             Reader in = new FileReader(path);
@@ -169,10 +232,25 @@ public class Import {
             }
             Connection.commit();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
 
+    /**
+     * Import events from a CSV file
+     *
+     * @param path Path to the CSV file
+     * @param limit Number of records to import
+     * @see Event
+     * @see Organisation
+     * @see WordingSport
+     * @see WordingEpreuve
+     * @see EventDao
+     * @see OrganisationDao
+     * @see WordingSportDao
+     * @see WordingEpreuveDao
+     * @see Connection
+     */
     public static void eventFile(String path, int limit) {
         try {
             Reader in = new FileReader(path);

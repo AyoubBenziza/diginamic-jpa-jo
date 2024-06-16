@@ -14,7 +14,14 @@ import java.util.Set;
  * Links to WordingSport.
  * Links to WordingOrganisation.
  *
- * @Author AyoubBenziza
+ * @see Sport
+ * @see Epreuve
+ * @see Organisation
+ * @see WordingSport
+ * @see WordingEpreuve
+ * @see WordingOrganisation
+ *
+ * @author AyoubBenziza
  */
 @Entity
 @Table(name = "langue")
@@ -35,6 +42,8 @@ public class Langue {
     /**
      * The set of wordings associated with this Langue.
      * Each wording represents the name of the Epreuve in a different language.
+     *
+     * @see WordingEpreuve
      */
     @OneToMany(mappedBy = "langue")
     private Set<WordingEpreuve> wordingsEpreuve;
@@ -42,6 +51,8 @@ public class Langue {
     /**
      * The set of wordings associated with this Langue.
      * Each wording represents the name of the Sport in a different language.
+     *
+     * @see WordingSport
      */
     @OneToMany(mappedBy = "langue")
     private Set<WordingSport> wordingSports;
@@ -49,6 +60,8 @@ public class Langue {
     /**
      * The set of wordings associated with this Langue.
      * Each wording represents the name of the Organisation in a different language.
+     *
+     * @see WordingOrganisation
      */
     @OneToMany(mappedBy = "langue")
     private Set<WordingOrganisation> wordingOrganisations;
@@ -69,7 +82,7 @@ public class Langue {
     }
 
     /**
-     * Sets the unique identifier of this Langue.
+     * Setter for the unique identifier of this Langue.
      *
      * @param id the unique identifier to set
      */
@@ -80,14 +93,14 @@ public class Langue {
     /**
      * Getter for the unique identifier of this Langue.
      *
-     * @return the unique identifier
+     * @return the unique identifier of this Langue
      */
     public int getId() {
         return id;
     }
 
     /**
-     * Sets the name of this Langue.
+     * Setter for the name of this Langue.
      *
      * @param name the name to set
      */

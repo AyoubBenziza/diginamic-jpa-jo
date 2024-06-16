@@ -2,14 +2,17 @@ package fr.diginamic.entities;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Represents an Event in the system
  * Links to Organisation
+ * Links to Sport
+ * Links to Epreuve
  *
- * @Author AyoubBenziza
+ * @see Sport
+ * @see Epreuve
+ * @see Organisation
+ *
+ * @author AyoubBenziza
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -85,13 +88,25 @@ public class Event {
 
     /**
      * The organisation that organised the event
+     *
+     * @see Organisation
      */
     @ManyToOne
     private Organisation organisation;
 
+    /**
+     * The sport of the event
+     *
+     * @see Sport
+     */
     @ManyToOne
     private Sport sport;
 
+    /**
+     * The epreuve of the event
+     *
+     * @see Epreuve
+     */
     @ManyToOne
     private Epreuve epreuve;
 
@@ -132,7 +147,7 @@ public class Event {
     }
 
     /**
-     * Sets the unique identifier of this Event.
+     * Setter for the unique identifier of this Event.
      *
      * @param id the unique identifier to set
      */
@@ -143,14 +158,14 @@ public class Event {
     /**
      * Getter for the unique identifier of this Event.
      *
-     * @return the unique identifier
+     * @return the unique identifier of this Event
      */
     public int getId() {
         return id;
     }
 
     /**
-     * Sets the name of this Event.
+     * Setter for the name of this Event.
      *
      * @param nom the name to set
      */
@@ -168,7 +183,7 @@ public class Event {
     }
 
     /**
-     * Sets the gender of the champion.
+     * Setter for the gender of the champion.
      *
      * @param sexe the gender to set
      */
@@ -186,7 +201,7 @@ public class Event {
     }
 
     /**
-     * Sets the age of the champion.
+     * Setter for the age of the champion.
      *
      * @param age the age to set
      */
@@ -204,7 +219,7 @@ public class Event {
     }
 
     /**
-     * Sets the height of the champion.
+     * Setter for the height of the champion.
      *
      * @param taille the height to set
      */
@@ -222,7 +237,7 @@ public class Event {
     }
 
     /**
-     * Sets the weight of the champion.
+     * Setter for the weight of the champion.
      *
      * @param poids the weight to set
      */
@@ -240,7 +255,7 @@ public class Event {
     }
 
     /**
-     * Sets the team of the champion.
+     * Setter for the team of the champion.
      *
      * @param equipe the team to set
      */
@@ -258,7 +273,7 @@ public class Event {
     }
 
     /**
-     * Sets the country code of the champion.
+     * Setter for the country code of the champion.
      *
      * @param cno the country code to set
      */
@@ -276,7 +291,7 @@ public class Event {
     }
 
     /**
-     * Sets the year of the event.
+     * Setter for the year of the event.
      *
      * @param annee the year to set
      */
@@ -294,7 +309,7 @@ public class Event {
     }
 
     /**
-     * Sets the season of the event.
+     * Setter for the season of the event.
      *
      * @param saison the season to set
      */
@@ -312,7 +327,7 @@ public class Event {
     }
 
     /**
-     * Sets the city of the event.
+     * Setter for the city of the event.
      *
      * @param ville the city to set
      */
@@ -330,7 +345,7 @@ public class Event {
     }
 
     /**
-     * Sets the name of the champion.
+     * Setter for the name of the champion.
      *
      * @param champion the name to set
      */
@@ -348,7 +363,7 @@ public class Event {
     }
 
     /**
-     * Sets the medal of the champion.
+     * Setter for the medal of the champion.
      *
      * @param medaille the medal to set
      */
@@ -366,9 +381,10 @@ public class Event {
     }
 
     /**
-     * Sets the organisation that organised the event.
+     * Setter for the organisation that organised the event.
      *
      * @param organisation the organisation to set
+     * @see Organisation
      */
     public void setOrganisation(Organisation organisation) {
         this.organisation = organisation;
@@ -378,6 +394,7 @@ public class Event {
      * Getter for the organisation that organised the event.
      *
      * @return the organisation
+     * @see Organisation
      */
     public Organisation getOrganisation() {
         return organisation;
@@ -387,15 +404,17 @@ public class Event {
      * Getter for the sport of the event.
      *
      * @return the sport
+     * @see Sport
      */
     public Sport getSport() {
         return sport;
     }
 
     /**
-     * Sets the sport of the event.
+     * Setter for the sport of the event.
      *
      * @param sport the sport to set
+     * @see Sport
      */
     public void setSport(Sport sport) {
         this.sport = sport;
@@ -405,15 +424,17 @@ public class Event {
      * Getter for the epreuve of the event.
      *
      * @return the epreuve
+     * @see Epreuve
      */
     public Epreuve getEpreuve() {
         return epreuve;
     }
 
     /**
-     * Sets the epreuve of the event.
+     * Setter for the epreuve of the event.
      *
      * @param epreuve the epreuve to set
+     * @see Epreuve
      */
     public void setEpreuve(Epreuve epreuve) {
         this.epreuve = epreuve;

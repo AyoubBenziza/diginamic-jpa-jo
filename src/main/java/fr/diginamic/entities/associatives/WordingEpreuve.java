@@ -9,7 +9,10 @@ import jakarta.persistence.*;
  * A WordingEpreuve is a name of an Epreuve in a specific language.
  * Table associatives between Epreuve and Langue.
  *
- * @Author AyoubBenziza
+ * @see Epreuve
+ * @see Langue
+ *
+ * @author AyoubBenziza
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -29,12 +32,16 @@ public class WordingEpreuve {
 
     /**
      * The language of the WordingEpreuve.
+     *
+     * @see Langue
      */
     @ManyToOne
     private Langue langue;
 
     /**
      * The Epreuve of the WordingEpreuve.
+     *
+     * @see Epreuve
      */
     @ManyToOne
     private Epreuve epreuve;
@@ -46,6 +53,7 @@ public class WordingEpreuve {
 
     /**
      * Constructor with parameters.
+     *
      * @param name name of the WordingEpreuve
      * @param langue language of the WordingEpreuve
      * @param epreuve Epreuve of the WordingEpreuve
@@ -57,7 +65,8 @@ public class WordingEpreuve {
     }
 
     /**
-     * Sets the name of the WordingEpreuve.
+     * Setter the name of the WordingEpreuve.
+     *
      * @param name name of the WordingEpreuve
      */
     public void setName(String name) {
@@ -66,6 +75,7 @@ public class WordingEpreuve {
 
     /**
      * Getter of the name of the WordingEpreuve.
+     *
      * @return name
      */
     public String getName() {
@@ -73,7 +83,8 @@ public class WordingEpreuve {
     }
 
     /**
-     * Sets the id of the WordingEpreuve.
+     * Setter of the id of the WordingEpreuve.
+     *
      * @param id id of the WordingEpreuve
      */
     public void setId(int id) {
@@ -82,6 +93,7 @@ public class WordingEpreuve {
 
     /**
      * Getter of the id of the WordingEpreuve.
+     *
      * @return id
      */
     public int getId() {
@@ -89,8 +101,10 @@ public class WordingEpreuve {
     }
 
     /**
-     * Sets the language of the WordingEpreuve.
-     * @param langue
+     * Setter of the language of the WordingEpreuve.
+     *
+     * @param langue language of the WordingEpreuve
+     * @see Langue
      */
     public void setLangue(Langue langue) {
         this.langue = langue;
@@ -98,15 +112,19 @@ public class WordingEpreuve {
 
     /**
      * Getter of the language of the WordingEpreuve.
+     *
      * @return langue
+     * @see Langue
      */
     public Langue getLangue() {
         return langue;
     }
 
     /**
-     * Sets the Epreuve of the WordingEpreuve.
+     * Setter of the Epreuve of the WordingEpreuve.
+     *
      * @param epreuve Epreuve of the WordingEpreuve
+     * @see Epreuve
      */
     public void setEpreuve(Epreuve epreuve) {
         this.epreuve = epreuve;
@@ -114,7 +132,9 @@ public class WordingEpreuve {
 
     /**
      * Getter of the Epreuve of the WordingEpreuve.
+     *
      * @return epreuve
+     * @see Epreuve
      */
     public Epreuve getEpreuve() {
         return epreuve;

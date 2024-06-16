@@ -12,7 +12,10 @@ import java.util.stream.Collectors;
  * A Sport can have multiple wordings (names) depending on the language.
  * Links to WordingSport.
  *
- * @Author AyoubBenziza
+ * @see WordingSport
+ * @see Event
+ *
+ * @author AyoubBenziza
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -27,6 +30,8 @@ public class Sport {
 
     /**
      * The wordings of the Sport.
+     *
+     * @see WordingSport
      */
     @OneToMany(mappedBy = "sport")
     private Set<WordingSport> wordingSports = new HashSet<>();
@@ -40,12 +45,18 @@ public class Sport {
     public Sport() {
     }
 
+    /**
+     * Constructor with the wordings of the Sport.
+     *
+     * @param wordingSports the wordings of the Sport
+     * @see WordingSport
+     */
     public Sport(Set<WordingSport> wordingSports) {
         this.wordingSports = wordingSports;
     }
 
     /**
-     * Sets the id of the Sport.
+     * Setter of the id of the Sport.
      *
      * @param id the id to set
      */
@@ -63,9 +74,10 @@ public class Sport {
     }
 
     /**
-     * Sets the wordings of the Sport.
+     * Setter of the wordings of the Sport.
      *
      * @param wordingSports the wordings to set
+     * @see WordingSport
      */
     public void setWordings(Set<WordingSport> wordingSports) {
         this.wordingSports = wordingSports;
@@ -73,7 +85,9 @@ public class Sport {
 
     /**
      * Getter of the wordings of the Sport.
+     *
      * @return wordingSports
+     * @see WordingSport
      */
     public Set<WordingSport> getWordings() {
         return wordingSports;
@@ -83,6 +97,7 @@ public class Sport {
      * Adds a wording to the Sport.
      *
      * @param wordingSport the wording to add
+     * @see WordingSport
      */
     public void addWording(WordingSport wordingSport) {
         wordingSports.add(wordingSport);
@@ -93,6 +108,7 @@ public class Sport {
      * Removes a wording from the Sport.
      *
      * @param wordingSport the wording to remove
+     * @see WordingSport
      */
     public void removeWording(WordingSport wordingSport) {
         wordingSports.remove(wordingSport);
@@ -100,6 +116,8 @@ public class Sport {
 
     /**
      * Clears all the wordings of the Sport.
+     *
+     * @see WordingSport
      */
     public void clearWordings() {
         wordingSports.clear();
@@ -109,15 +127,17 @@ public class Sport {
      * Getter of the events of the Sport.
      *
      * @return events
+     * @see Event
      */
     public Set<Event> getEvents() {
         return events;
     }
 
     /**
-     * Sets the events of the Sport.
+     * Setter of the events of the Sport.
      *
      * @param events the events to set
+     * @see Event
      */
     public void setEvents(Set<Event> events) {
         this.events = events;
@@ -127,6 +147,7 @@ public class Sport {
      * Adds an event to the Sport.
      *
      * @param event the event to add
+     * @see Event
      */
     public void addEvent(Event event) {
         events.add(event);
@@ -137,6 +158,7 @@ public class Sport {
      * Removes an event from the Sport.
      *
      * @param event the event to remove
+     * @see Event
      */
     public void removeEvent(Event event) {
         events.remove(event);
@@ -145,11 +167,18 @@ public class Sport {
 
     /**
      * Clears all the events of the Sport.
+     *
+     * @see Event
      */
     public void clearEvents() {
         events.clear();
     }
 
+    /**
+     * Returns a string representation of the Sport.
+     *
+     * @return a string representation of the Sport
+     */
     @Override
     public String toString() {
         String names = wordingSports.stream()

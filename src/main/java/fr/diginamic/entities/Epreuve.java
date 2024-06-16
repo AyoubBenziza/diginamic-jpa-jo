@@ -12,6 +12,9 @@ import java.util.Set;
  * Links to WordingEpreuve.
  * Links to Epreuve.
  *
+ * @see WordingEpreuve
+ * @see Event
+ *
  * @author AyoubBenziza
  */
 @Entity
@@ -29,12 +32,16 @@ public class Epreuve {
     /**
      * The set of wordings associated with this Epreuve.
      * Each wording represents the name of the Epreuve in a different language.
+     *
+     * @see WordingEpreuve
      */
     @OneToMany(mappedBy = "epreuve")
     private Set<WordingEpreuve> wordingEpreuves = new HashSet<>();
 
     /**
      * The organisation that organizes this Epreuve.
+     *
+     * @see Event
      */
     @OneToMany(mappedBy = "epreuve")
     private Set<Event> events = new HashSet<>();
@@ -46,7 +53,7 @@ public class Epreuve {
     }
 
     /**
-     * Sets the unique identifier of this Epreuve.
+     * Setter for the unique identifier of this Epreuve.
      *
      * @param id the unique identifier to set
      */
@@ -57,14 +64,14 @@ public class Epreuve {
     /**
      * Getter for the unique identifier of this Epreuve.
      *
-     * @return the unique identifier
+     * @return the unique identifier of this Epreuve
      */
     public int getId() {
         return id;
     }
 
     /**
-     * Sets the set of wordings associated with this Epreuve.
+     * Setter for the set of wordings associated with this Epreuve.
      *
      * @param wordingEpreuves the set of wordings to set
      */
@@ -76,6 +83,7 @@ public class Epreuve {
      * Getter for the set of wordings associated with this Epreuve.
      *
      * @return the set of wordings
+     * @see WordingEpreuve
      */
     public Set<WordingEpreuve> getWordings() {
         return wordingEpreuves;
@@ -85,6 +93,7 @@ public class Epreuve {
      * Adds a wording to the set of wordings associated with this Epreuve.
      *
      * @param wordingEpreuve the wording to add
+     * @see WordingEpreuve
      */
     public void addWording(WordingEpreuve wordingEpreuve) {
         wordingEpreuves.add(wordingEpreuve);
@@ -94,6 +103,7 @@ public class Epreuve {
      * Removes a wording from the set of wordings associated with this Epreuve.
      *
      * @param wordingEpreuve the wording to remove
+     * @see WordingEpreuve
      */
     public void removeWording(WordingEpreuve wordingEpreuve) {
         wordingEpreuves.remove(wordingEpreuve);
@@ -101,15 +111,18 @@ public class Epreuve {
 
     /**
      * Clears the set of wordings associated with this Epreuve.
+     *
+     * @see WordingEpreuve
      */
     public void clearWordings() {
         wordingEpreuves.clear();
     }
 
     /**
-     * Sets the set of organisations that organize this Epreuve.
+     * Setter for the set of organisations that organize this Epreuve.
      *
      * @param events the set of organisations to set
+     * @see Event
      */
     public void setEvents(Set<Event> events) {
         this.events = events;
@@ -119,6 +132,7 @@ public class Epreuve {
      * Getter for the set of organisations that organize this Epreuve.
      *
      * @return the set of organisations
+     * @see Event
      */
     public Set<Event> getEvents() {
         return events;
@@ -128,6 +142,7 @@ public class Epreuve {
      * Adds an organisation to the set of organisations that organize this Epreuve.
      *
      * @param event the organisation to add
+     * @see Event
      */
     public void addEvent(Event event) {
         events.add(event);
@@ -137,6 +152,7 @@ public class Epreuve {
      * Removes an organisation from the set of organisations that organize this Epreuve.
      *
      * @param event the organisation to remove
+     * @see Event
      */
     public void removeEvent(Event event) {
         events.remove(event);
@@ -144,6 +160,8 @@ public class Epreuve {
 
     /**
      * Clears the set of organisations that organize this Epreuve.
+     *
+     * @see Event
      */
     public void clearEvents() {
         events.clear();

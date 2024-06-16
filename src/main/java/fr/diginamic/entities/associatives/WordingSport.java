@@ -9,7 +9,10 @@ import jakarta.persistence.*;
  * A WordingSport is a name of a Sport in a specific language.
  * Table associatives between Sport and Langue.
  *
- * @Author AyoubBenziza
+ * @see Langue
+ * @see Sport
+ *
+ * @author AyoubBenziza
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -29,12 +32,16 @@ public class WordingSport {
 
     /**
      * The language of the WordingSport.
+     *
+     * @see Langue
      */
     @ManyToOne
     private Langue langue;
 
     /**
      * The sport of the WordingSport.
+     *
+     * @see Sport
      */
     @ManyToOne
     private Sport sport;
@@ -52,7 +59,7 @@ public class WordingSport {
     }
 
     /**
-     * Sets the name of the WordingSport.
+     * Setter of the name of the WordingSport.
      *
      * @param name the name to set
      */
@@ -70,7 +77,7 @@ public class WordingSport {
     }
 
     /**
-     * Sets the id of the WordingSport.
+     * Setter of the id of the WordingSport.
      *
      * @param id the id to set
      */
@@ -88,9 +95,10 @@ public class WordingSport {
     }
 
     /**
-     * Sets the language of the WordingSport.
+     * Setter of the language of the WordingSport.
      *
      * @param langue the language to set
+     * @see Langue
      */
     public void setLangue(Langue langue) {
         this.langue = langue;
@@ -100,15 +108,17 @@ public class WordingSport {
      * Getter of the language of the WordingSport.
      *
      * @return Langue
+     * @see Langue
      */
     public Langue getLangue() {
         return langue;
     }
 
     /**
-     * Sets the sport of the WordingSport.
+     * Setter of the sport of the WordingSport.
      *
      * @param sport the sport to set
+     * @see Sport
      */
 
     public void setSport(Sport sport) {
@@ -119,11 +129,17 @@ public class WordingSport {
      * Getter of the sport of the WordingSport.
      *
      * @return Sport
+     * @see Sport
      */
     public Sport getSport() {
         return sport;
     }
 
+    /**
+     * Returns a string representation of the WordingSport.
+     *
+     * @return a string representation of the WordingSport
+     */
     @Override
     public String toString() {
         return name + "(" + langue.getName() +")";

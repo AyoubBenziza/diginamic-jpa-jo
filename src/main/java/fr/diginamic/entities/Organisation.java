@@ -12,7 +12,10 @@ import java.util.Set;
  * Links to WordingOrganisation.
  * Links to Event.
  *
- * @Author AyoubBenziza
+ * @see WordingOrganisation
+ * @see Event
+ *
+ * @author AyoubBenziza
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -46,12 +49,16 @@ public class Organisation {
     /**
      * The set of wordings associated with this Organisation.
      * Each wording represents the name of the Organisation in a different language.
+     *
+     * @see WordingOrganisation
      */
     @OneToMany(mappedBy = "organisation")
     private Set<WordingOrganisation> wordingOrganisations = new HashSet<>();
 
     /**
      * The set of events associated with this Organisation.
+     *
+     * @see Event
      */
     @OneToMany(mappedBy = "organisation")
     private Set<Event> events;
@@ -63,7 +70,7 @@ public class Organisation {
     }
 
     /**
-     * Sets the unique identifier of this Organisation.
+     * Setter for the unique identifier of this Organisation.
      *
      * @param id the unique identifier to set
      */
@@ -74,14 +81,14 @@ public class Organisation {
     /**
      * Getter for the unique identifier of this Organisation.
      *
-     * @return the unique identifier
+     * @return the unique identifier of this Organisation
      */
     public int getId() {
         return id;
     }
 
     /**
-     * Sets the CIO code of this Organisation.
+     * Setter for the CIO code of this Organisation.
      *
      * @param cio_code the CIO code to set
      */
@@ -108,7 +115,7 @@ public class Organisation {
     }
 
     /**
-     * Sets the ISO code of this Organisation.
+     * Setter for the ISO code of this Organisation.
      *
      * @param iso_code the ISO code to set
      */
@@ -126,7 +133,7 @@ public class Organisation {
     }
 
     /**
-     * Sets the obsolete status of this Organisation.
+     * Setter for the obsolete status of this Organisation.
      *
      * @param obsolete the obsolete status to set
      */
@@ -135,9 +142,10 @@ public class Organisation {
     }
 
     /**
-     * Sets the wordings associated with this Organisation.
+     * Setter for the wordings associated with this Organisation.
      *
      * @param wordingOrganisations the wordings to set
+     * @see WordingOrganisation
      */
     public void setWordings(Set<WordingOrganisation> wordingOrganisations) {
         this.wordingOrganisations = wordingOrganisations;
@@ -147,6 +155,7 @@ public class Organisation {
      * Getter for the wordings associated with this Organisation.
      *
      * @return the wordings
+     * @see WordingOrganisation
      */
     public Set<WordingOrganisation> getWordings() {
         return wordingOrganisations;
@@ -156,6 +165,7 @@ public class Organisation {
      * Adds a wording to the set of wordings associated with this Organisation.
      *
      * @param wordingOrganisation the wording to add
+     * @see WordingOrganisation
      */
     public void addWording(WordingOrganisation wordingOrganisation) {
         wordingOrganisations.add(wordingOrganisation);
@@ -165,6 +175,7 @@ public class Organisation {
      * Removes a wording from the set of wordings associated with this Organisation.
      *
      * @param wordingOrganisation the wording to remove
+     * @see WordingOrganisation
      */
     public void removeWording(WordingOrganisation wordingOrganisation) {
         wordingOrganisations.remove(wordingOrganisation);
@@ -172,15 +183,18 @@ public class Organisation {
 
     /**
      * Clears the set of wordings associated with this Organisation.
+     *
+     * @see WordingOrganisation
      */
     public void clearWordings() {
         wordingOrganisations.clear();
     }
 
     /**
-     * Sets the events associated with this Organisation.
+     * Setter for the events associated with this Organisation.
      *
      * @param events the events to set
+     * @see Event
      */
     public void setEvents(Set<Event> events) {
         this.events = events;
@@ -190,6 +204,7 @@ public class Organisation {
      * Getter for the events associated with this Organisation.
      *
      * @return the events
+     * @see Event
      */
     public Set<Event> getEvents() {
         return events;
@@ -199,6 +214,7 @@ public class Organisation {
      * Adds an event to the set of events associated with this Organisation.
      *
      * @param event the event to add
+     * @see Event
      */
     public void addEvent(Event event) {
         events.add(event);
@@ -208,6 +224,7 @@ public class Organisation {
      * Removes an event from the set of events associated with this Organisation.
      *
      * @param event the event to remove
+     * @see Event
      */
     public void removeEvent(Event event) {
         events.remove(event);
@@ -215,6 +232,8 @@ public class Organisation {
 
     /**
      * Clears the set of events associated with this Organisation.
+     *
+     * @see Event
      */
     public void clearEvents() {
         events.clear();

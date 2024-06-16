@@ -1,21 +1,56 @@
 package fr.diginamic.utils;
 
-import fr.diginamic.Main;
 import fr.diginamic.daos.SportDao;
 import fr.diginamic.database.Connection;
 
 import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * Class Menu
+ * Each method of this class displays a menu for the user to interact with the application
+ *
+ * @see SportDao
+ * @see Connection
+ * @see Import
+ * @see Scanner
+ *
+ * @author AyoubBenziza
+ */
 public class Menu {
-    private static final String SPORTS_CSV = Objects.requireNonNull(Main.class.getClassLoader().getResource("sports.csv")).getPath();
-    private static final String EPREUVES_CSV = Objects.requireNonNull(Main.class.getClassLoader().getResource("epreuves.csv")).getPath();
-    private static final String ORGANISATIONS_CSV = Objects.requireNonNull(Main.class.getClassLoader().getResource("organisations.csv")).getPath();
-    private static final String EVENTS_CSV = Objects.requireNonNull(Main.class.getClassLoader().getResource("evenements.csv")).getPath();
+    /**
+     * Path to the sports.csv file
+     */
+    private static final String SPORTS_CSV = Objects.requireNonNull(Menu.class.getClassLoader().getResource("sports.csv")).getPath();
 
+    /**
+     * Path to the epreuves.csv file
+     */
+    private static final String EPREUVES_CSV = Objects.requireNonNull(Menu.class.getClassLoader().getResource("epreuves.csv")).getPath();
+
+    /**
+     * Path to the organisations.csv file
+     */
+    private static final String ORGANISATIONS_CSV = Objects.requireNonNull(Menu.class.getClassLoader().getResource("organisations.csv")).getPath();
+
+    /**
+     * Path to the events.csv file
+     */
+    private static final String EVENTS_CSV = Objects.requireNonNull(Menu.class.getClassLoader().getResource("evenements.csv")).getPath();
+
+    /**
+     * {@link SportDao} sportDao
+     */
     private static final SportDao sportDao = Connection.sportDao;
+
+    /**
+     * {@link Scanner} scanner
+     */
     private static final Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Display the menu of the application
+     */
     public static void displayMenu() {
         int choice;
         do{
@@ -55,6 +90,9 @@ public class Menu {
         scanner.close();
     }
 
+    /**
+     * Display the menu of the sports
+     */
     public static void displayMenuSport() {
         int choice;
         do {
@@ -82,6 +120,9 @@ public class Menu {
         } while (choice != 99);
     }
 
+    /**
+     * Display the menu of the events
+     */
     public static void displayMenuEpreuve() {
         int choice;
         do {
@@ -108,6 +149,9 @@ public class Menu {
         } while (choice != 99);
     }
 
+    /**
+     * Display the menu of the organisations
+     */
     public static void displayMenuOrganisation() {
         int choice;
         do {
@@ -134,6 +178,9 @@ public class Menu {
         } while (choice != 99);
     }
 
+    /**
+     * Display the menu of the events
+     */
     public static void displayMenuEvenement() {
         int choice;
         do {
@@ -160,6 +207,11 @@ public class Menu {
         } while (choice != 99);
     }
 
+    /**
+     * Import the data from the CSV files
+     *
+     * @see Import
+     */
     public static void importData() {
         System.out.println("Import des données");
         Import.sportFile(SPORTS_CSV, Integer.MAX_VALUE);

@@ -9,7 +9,10 @@ import jakarta.persistence.*;
  * A WordingOrganisation is a name of an Organisation in a specific language.
  * Table associatives between Organisation and Langue.
  *
- * @Author AyoubBenziza
+ * @see Langue
+ * @see Organisation
+ *
+ * @author AyoubBenziza
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -29,12 +32,16 @@ public class WordingOrganisation {
 
     /**
      * The language of the WordingOrganisation.
+     *
+     * @see Langue
      */
     @ManyToOne
     private Langue langue;
 
     /**
      * The Organisation of the WordingOrganisation.
+     *
+     * @see Organisation
      */
     @ManyToOne
     private Organisation organisation;
@@ -46,6 +53,7 @@ public class WordingOrganisation {
 
     /**
      * Constructor with parameters.
+     *
      * @param name name of the WordingOrganisation
      * @param langue language of the WordingOrganisation
      * @param organisation Organisation of the WordingOrganisation
@@ -57,8 +65,9 @@ public class WordingOrganisation {
     }
 
     /**
-     * Sets the name of the WordingOrganisation.
-     * @param name
+     * Setter of the Organisation of the WordingOrganisation.
+     *
+     * @param name name of the WordingOrganisation
      */
     public void setName(String name) {
         this.name = name;
@@ -66,6 +75,7 @@ public class WordingOrganisation {
 
     /**
      * Getter of the name of the WordingOrganisation.
+     *
      * @return name
      */
     public String getName() {
@@ -73,8 +83,9 @@ public class WordingOrganisation {
     }
 
     /**
-     * Sets the id of the WordingOrganisation.
-     * @param id
+     * Setter of the Organisation of the WordingOrganisation.
+     *
+     * @param id id of the WordingOrganisation
      */
     public void setId(int id) {
         this.id = id;
@@ -82,6 +93,7 @@ public class WordingOrganisation {
 
     /**
      * Getter of the id of the WordingOrganisation.
+     *
      * @return id
      */
     public int getId() {
@@ -89,8 +101,10 @@ public class WordingOrganisation {
     }
 
     /**
-     * Sets the language of the WordingOrganisation.
-     * @param langue
+     * Setter of the Organisation of the WordingOrganisation.
+     *
+     * @param langue language of the WordingOrganisation
+     * @see Langue
      */
     public void setLangue(Langue langue) {
         this.langue = langue;
@@ -98,7 +112,9 @@ public class WordingOrganisation {
 
     /**
      * Getter of the language of the WordingOrganisation.
+     *
      * @return langue
+     * @see Langue
      */
     public Langue getLangue() {
         return langue;
