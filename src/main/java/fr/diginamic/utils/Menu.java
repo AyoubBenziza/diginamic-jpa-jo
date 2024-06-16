@@ -69,7 +69,6 @@ public class Menu {
                 case 1:
                     System.out.println("Liste des sports");
                     sportDao.findAll().forEach(System.out::println);
-                    System.out.println(sportDao.findById(1));
                     break;
                 case 2:
                     System.out.println("Ajout d'un sport");

@@ -6,12 +6,25 @@ import fr.diginamic.entities.associatives.WordingSport;
 import java.util.HashSet;
 import java.util.Set;
 
-public class WordingSportDao extends AbstractDao {
+public class WordingSportDao extends AbstractDao<WordingSport> {
 
-    private final Set<WordingSport> wordingSports = new HashSet<>();
+    private final Set<WordingSport> wordingSports;
 
     public WordingSportDao() {
-        this.wordingSports.addAll(em.createQuery("SELECT ws FROM WordingSport ws", WordingSport.class).getResultList());
+        wordingSports = findAll();
+    }
+
+    @Override
+    public Set<WordingSport> findAll() {
+        return new HashSet<>(em.createQuery("SELECT ws FROM WordingSport ws", WordingSport.class).getResultList());
+    }
+
+    @Override
+    public WordingSport findByPk(int id) {
+        return wordingSports.stream()
+                .filter(w -> w.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     public WordingSport findBySportName(String sportName) {
@@ -27,6 +40,7 @@ public class WordingSportDao extends AbstractDao {
                 .anyMatch(w -> w.getName().equals(sportName) && w.getLangue().getName().equals(languageName));
     }
 
+    @Override
     public void save(WordingSport wordingSport) {
         wordingSports.add(wordingSport);
         em.persist(wordingSport);
