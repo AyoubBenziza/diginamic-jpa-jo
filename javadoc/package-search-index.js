@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"fr.diginamic"},{"l":"fr.diginamic.daos"},{"l":"fr.diginamic.daos.associatives"},{"l":"fr.diginamic.database"},{"l":"fr.diginamic.entities"},{"l":"fr.diginamic.entities.associatives"},{"l":"fr.diginamic.exceptions"},{"l":"fr.diginamic.interfaces"},{"l":"fr.diginamic.utils"}];updateSearchResults();

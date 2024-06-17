@@ -1,0 +1,9 @@
+fr.diginamic
+fr.diginamic.daos
+fr.diginamic.daos.associatives
+fr.diginamic.database
+fr.diginamic.entities
+fr.diginamic.entities.associatives
+fr.diginamic.exceptions
+fr.diginamic.interfaces
+fr.diginamic.utils
