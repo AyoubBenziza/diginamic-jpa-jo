@@ -166,4 +166,17 @@ public class Epreuve {
     public void clearEvents() {
         events.clear();
     }
+
+    /**
+     * Returns a string representation of the Epreuve.
+     *
+     * @return a string representation of the Epreuve
+     */
+    @Override
+    public String toString() {
+        String names = wordingEpreuves.stream()
+                .map(WordingEpreuve::getName)
+                .reduce("", (acc, name) -> acc + name + ", ");
+        return "Epreuve{" + "id=" + id + ", names=[" + names + "]}";
+    }
 }

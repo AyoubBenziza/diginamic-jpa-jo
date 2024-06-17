@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Represents a Sport in the system.
@@ -182,8 +181,8 @@ public class Sport {
     @Override
     public String toString() {
         String names = wordingSports.stream()
-                .map(wordingSport -> wordingSport.getName() + " (" + wordingSport.getLangue().getName() + ")")
-                .collect(Collectors.joining(", "));
+                .map(WordingSport::getName)
+                .reduce("", (acc, name) -> acc + name + ", ");
         return "Sport {id=" + id + ", names=[" + names + "]}";
     }
 }

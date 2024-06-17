@@ -37,7 +37,7 @@ public class Organisation {
     /**
      * The ISO code of the Organisation.
      */
-    @Column(name = "iso_code", length = 10, nullable = true, unique = true)
+    @Column(name = "iso_code", length = 10, unique = true)
     private String iso_code;
 
     /**
@@ -237,5 +237,24 @@ public class Organisation {
      */
     public void clearEvents() {
         events.clear();
+    }
+
+    /**
+     * Returns a string representation of the Organisation.
+     *
+     * @return a string representation of the Organisation
+     */
+    @Override
+    public String toString() {
+        String names = wordingOrganisations.stream()
+                .map(WordingOrganisation::getName)
+                .reduce("", (acc, name) -> acc + name + ", ");
+        return "Organisation{" +
+                "id=" + id +
+                ", cio_code='" + cio_code + '\'' +
+                ", iso_code='" + iso_code + '\'' +
+                ", obsolete=" + obsolete +
+                ", names=[" + names +
+                "]}";
     }
 }

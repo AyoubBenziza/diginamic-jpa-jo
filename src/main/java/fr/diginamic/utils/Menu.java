@@ -1,5 +1,6 @@
 package fr.diginamic.utils;
 
+import fr.diginamic.daos.EventDao;
 import fr.diginamic.daos.SportDao;
 import fr.diginamic.database.Connection;
 
@@ -62,6 +63,11 @@ public class Menu {
      * {@link SportDao} sportDao
      */
     private static final SportDao sportDao = Connection.sportDao;
+
+    /**
+     * {@link EventDao} eventDao
+     */
+    private static final EventDao eventDao = Connection.eventDao;
 
     /**
      * {@link Scanner} scanner
@@ -208,6 +214,9 @@ public class Menu {
             System.out.println("1. Lister les événements");
             System.out.println("2. Ajouter un événement");
             System.out.println("3. Supprimer un événement");
+            System.out.println("4. Lister les médailles triées par année");
+            System.out.println("5. Lister les médailles par sport");
+            System.out.println("6. Lister les médailles par sport et épreuve");
             System.out.println("99. Retour au menu principal");
             choice = scanner.nextInt();
 
@@ -220,6 +229,18 @@ public class Menu {
                     break;
                 case 3:
                     System.out.println("Suppression d'un événement");
+                    break;
+                case 4:
+                    System.out.println("Liste des médailles triées par année");
+                    eventDao.getMedalsOrderByYear().forEach(System.out::println);
+                    break;
+                case 5:
+                    System.out.println("Liste des médailles par sport");
+                    eventDao.getMedalsGroupBySport().forEach((key, value) -> System.out.println(key + " : " + value));
+                    break;
+                case 6:
+                    System.out.println("Liste des médailles par sport et épreuve");
+                    eventDao.getMedalsGroupBySportAndEpreuve().forEach((key, value) -> System.out.println(key + " : " + value));
                     break;
                 default:
                     System.out.println("Choix invalide");

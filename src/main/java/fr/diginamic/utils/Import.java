@@ -9,12 +9,15 @@ import fr.diginamic.entities.*;
 import fr.diginamic.entities.associatives.WordingEpreuve;
 import fr.diginamic.entities.associatives.WordingOrganisation;
 import fr.diginamic.entities.associatives.WordingSport;
+import fr.diginamic.exceptions.ImportException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.time.Year;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -83,8 +86,61 @@ public class Import {
 
             Connection.commit();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            throw new ImportException("Failed to import data from " + path, e);
         }
+    }
+
+    /**
+     * Get the value of a record
+     *
+     * @param record CSVRecord
+     * @param key Key of the record
+     * @return Value of the record
+     */
+    private static String getRecordValue(CSVRecord record, String key) {
+        String value = record.get(key);
+        return (value.isEmpty() || value.equals("NA")) ? null : value;
+    }
+
+    /**
+     * Get the value of a record as an integer
+     *
+     * @param record CSVRecord
+     * @param key Key of the record
+     * @param defaultValue Default value if the record is empty
+     * @return Value of the record as an integer
+     */
+    private static int getRecordValueAsInt(CSVRecord record, String key, int defaultValue) {
+        String value = getRecordValue(record, key);
+        return value == null ? defaultValue : Integer.parseInt(value);
+    }
+
+    /**
+     * Get the value of a record as a float
+     *
+     * @param record CSVRecord
+     * @param key Key of the record
+     * @param defaultValue Default value if the record is empty
+     * @return Value of the record as a float
+     */
+    private static float getRecordValueAsFloat(CSVRecord record, String key, float defaultValue) {
+        String value = getRecordValue(record, key);
+        return value == null ? defaultValue : Float.parseFloat(value);
+    }
+
+    /**
+     * Get or create a Langue
+     *
+     * @param languageName Name of the language
+     * @return Langue
+     */
+    private static Langue getOrCreateLangue(String languageName) {
+        Langue langue = langueDao.findByName(languageName);
+        if (langue == null) {
+            langue = new Langue(languageName);
+            langueDao.save(langue); // Fetch the persisted Langue
+        }
+        return langue;
     }
 
     /**
@@ -110,11 +166,7 @@ public class Import {
                 String sportName = record.get(header).trim();
                 String languageName = header.split("_")[1]; // assuming the header format is "libelle_xx"
 
-                Langue langue = langueDao.findByName(languageName);
-                if (langue == null) {
-                    langue = new Langue(languageName);
-                    langueDao.save(langue); // Fetch the persisted Langue
-                }
+                Langue langue = getOrCreateLangue(languageName);
 
                 if (!wordingSportDao.exists(sportName, languageName) && !sportName.isEmpty()) {
                     WordingSport wordingSport = new WordingSport(sportName, langue, sport);
@@ -148,11 +200,7 @@ public class Import {
                 String epreuveName = record.get(header).trim();
                 String languageName = header.split("_")[1]; // assuming the header format is "libelle_xx"
 
-                Langue langue = langueDao.findByName(languageName);
-                if (langue == null) {
-                    langue = new Langue(languageName);
-                    langueDao.save(langue); // Fetch the persisted Langue
-                }
+                Langue langue = getOrCreateLangue(languageName);
 
                 if (!wordingEpreuveDao.exists(epreuveName, languageName) && !epreuveName.isEmpty()) {
                     WordingEpreuve wordingEpreuve = new WordingEpreuve(epreuveName, langue, epreuve);
@@ -180,11 +228,9 @@ public class Import {
     public static void organisationFile(String path, String[] headers, int limit) {
         importFile(path, headers, limit, record -> {
             Organisation organisation = new Organisation();
-            organisation.setCioCode(record.get("cio_code"));
-            if (!record.get("iso_code").isEmpty()){
-                organisation.setIsoCode(record.get("iso_code"));
-            }
-            String obsoleteValue = record.get("obsolete").trim();
+            organisation.setCioCode(getRecordValue(record, "cio_code"));
+            organisation.setIsoCode(getRecordValue(record, "iso_code"));
+            String obsoleteValue = record.get("obsolete");
             if (!obsoleteValue.isEmpty()){
                 if (obsoleteValue.equals("O")) {
                     organisation.setObsolete(true);
@@ -196,16 +242,12 @@ public class Import {
 
             String[] headersToCheck = {"organisation_fr", "organisation_en"};
             for (String header : headersToCheck) {
-                String organisationName = record.get(header).trim();
+                String organisationName = getRecordValue(record, header);
                 String languageName = header.split("_")[1]; // assuming the header format is "libelle_xx"
 
-                Langue langue = langueDao.findByName(languageName);
-                if (langue == null) {
-                    langue = new Langue(languageName);
-                    langueDao.save(langue); // Fetch the persisted Langue
-                }
+                Langue langue = getOrCreateLangue(languageName);
 
-                if (!wordingOrganisationDao.exists(organisationName,languageName) && !organisationName.isEmpty()) {
+                if (!wordingOrganisationDao.exists(organisationName,languageName) && organisationName != null) {
                     WordingOrganisation wordingOrganisation = new WordingOrganisation(organisationName, langue, organisation);
                     wordingOrganisationDao.save(wordingOrganisation);
                     organisation.addWording(wordingOrganisation);
@@ -233,98 +275,40 @@ public class Import {
     public static void eventFile(String path, String[] headers, int limit) {
         importFile(path, headers, limit, record -> {
             Event event = new Event();
-            if (record.get("event").isEmpty() || record.get("event").equals("NA")){
-                event.setNom(null);
-            } else {
-                event.setNom(record.get("event"));
-            }
+            event.setNom(getRecordValue(record, "event"));
+            event.setSexe(getRecordValue(record, "sexe") == null ? null : Objects.requireNonNull(getRecordValue(record, "sexe")).charAt(0));
+            event.setAge(getRecordValueAsInt(record, "age", 0));
+            event.setTaille(getRecordValueAsInt(record, "taille", 0));
+            event.setPoids(getRecordValueAsFloat(record, "poids", 0));
+            event.setEquipe(getRecordValue(record, "equipe"));
 
-            if (record.get("sexe").isEmpty() || record.get("sexe").equals("NA")){
-                event.setSexe(null);
-            } else {
-                event.setSexe(record.get("sexe").charAt(0));
-            }
-
-            if (record.get("age").isEmpty() || record.get("age").equals("NA")){
-                event.setAge(0);
-            } else {
-                event.setAge(Integer.parseInt(record.get("age")));
-            }
-
-            if (record.get("taille").isEmpty() || record.get("taille").equals("NA")){
-                event.setTaille(0);
-            } else {
-                event.setTaille(Integer.parseInt(record.get("taille")));
-            }
-
-            if (record.get("poids").isEmpty() || record.get("poids").equals("NA")){
-                event.setPoids(0);
-            } else {
-                // Convert String to float
-                event.setPoids(Float.parseFloat(record.get("poids")));
-            }
-
-            if (record.get("equipe").isEmpty() || record.get("equipe").equals("NA")){
-                event.setEquipe(null);
-            } else {
-                event.setEquipe(record.get("equipe"));
-            }
-
-            if (record.get("cno").isEmpty() || record.get("cno").equals("NA")){
-                event.setCno(null);
-            } else {
-                String cno = record.get("cno");
-                event.setCno(cno);
-
-                // Check if an organisation exists with the given CIO code
+            String cno = getRecordValue(record, "cno");
+            event.setCno(cno);
+            if (cno != null) {
                 Organisation organisation = organisationDao.findByCioCode(cno);
                 if (organisation != null) {
-                    // Organisation found, you can set it to the event
                     event.setOrganisation(organisation);
                 }
             }
 
-            if (record.get("annee").isEmpty() || record.get("annee").equals("NA")){
-                event.setAnnee(0);
-            } else {
-                event.setAnnee(Integer.parseInt(record.get("annee")));
+            String annee = getRecordValue(record, "annee");
+            if (annee != null) {
+                event.setAnnee(Year.of(Integer.parseInt(annee)));
             }
+            event.setSaison(getRecordValue(record, "saison"));
+            event.setVille(getRecordValue(record, "ville"));
+            event.setChampion(getRecordValue(record, "champion"));
+            event.setMedaille(getRecordValue(record, "medaille"));
 
-            if (record.get("saison").isEmpty() || record.get("saison").equals("NA")){
-                event.setSaison(null);
-            } else {
-                event.setSaison(record.get("saison"));
-            }
-
-            if (record.get("ville").isEmpty() || record.get("ville").equals("NA")){
-                event.setVille(null);
-            } else {
-                event.setVille(record.get("ville"));
-            }
-
-            if (record.get("champion").isEmpty() || record.get("champion").equals("NA")){
-                event.setChampion(null);
-            } else {
-                event.setChampion(record.get("champion"));
-            }
-
-            if (record.get("medaille").isEmpty() || record.get("medaille").equals("NA")){
-                event.setMedaille(null);
-            } else {
-                event.setMedaille(record.get("medaille"));
-            }
-
-            if (record.get("sport").isEmpty() || record.get("sport").equals("NA")){
-                event.setSport(null);
-            } else {
-                String sportName = record.get("sport");
+            String sportName = getRecordValue(record, "sport");
+            if (sportName != null) {
                 WordingSport wordingSport = wordingSportDao.findBySportName(sportName);
                 if (wordingSport != null) {
                     event.setSport(wordingSport.getSport());
                 }
             }
 
-            String epreuveName = record.get("event");
+            String epreuveName = getRecordValue(record, "event");
             WordingEpreuve wordingEpreuve = wordingEpreuveDao.findByEpreuveName(epreuveName);
             if (wordingEpreuve != null) {
                 event.setEpreuve(wordingEpreuve.getEpreuve());

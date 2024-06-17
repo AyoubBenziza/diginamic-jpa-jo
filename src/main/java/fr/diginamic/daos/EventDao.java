@@ -1,9 +1,15 @@
 package fr.diginamic.daos;
 
+import fr.diginamic.entities.Epreuve;
 import fr.diginamic.entities.Event;
+import fr.diginamic.entities.Sport;
+import fr.diginamic.entities.associatives.WordingSport;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.Year;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import javafx.util.Pair;
 
 /**
  * DAO class to manage the Event entity
@@ -53,6 +59,42 @@ public class EventDao extends AbstractDao<Event> {
                 .filter(e -> e.getId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Returns the medals ordered by year
+     *
+     * @return List of Pair objects containing the year and the medal
+     */
+    public List<Pair<Year, String>> getMedalsOrderByYear() {
+        return events.stream()
+                .filter(event -> event.getMedaille() != null)
+                .sorted(Comparator.comparing(Event::getAnnee))
+                .map(event -> new Pair<>(event.getAnnee(), event.getMedaille()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Return the medals grouped by sport
+     *
+     * @return Map of Set of WordingSport objects and List of String objects
+     */
+    public Map<Set<WordingSport>, List<String>> getMedalsGroupBySport(){
+        return events.stream()
+                .filter(event -> event.getMedaille() != null)
+                .collect(Collectors.groupingBy(event -> event.getSport().getWordings(), Collectors.mapping(Event::getMedaille, Collectors.toList())));
+    }
+
+    /**
+     * Returns the medals grouped by sport and epreuve
+     *
+     * @return Map of Pair objects containing the Sport and Epreuve objects and List of String objects
+     */
+    public Map<Pair<Sport, Epreuve>, List<String>> getMedalsGroupBySportAndEpreuve() {
+        return events.stream()
+                .filter(event -> event.getMedaille() != null)
+                .collect(Collectors.groupingBy(event -> new Pair<>(event.getSport(), event.getEpreuve()),
+                        Collectors.mapping(Event::getMedaille, Collectors.toList())));
     }
 
     /**

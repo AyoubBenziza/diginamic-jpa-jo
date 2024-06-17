@@ -2,6 +2,8 @@ package fr.diginamic.entities;
 
 import jakarta.persistence.*;
 
+import java.time.Year;
+
 /**
  * Represents an Event in the system
  * Links to Organisation
@@ -68,7 +70,7 @@ public class Event {
     /**
      * The year of the event
      */
-    private int annee;
+    private Year annee;
 
     /**
      * The season of the event
@@ -83,7 +85,7 @@ public class Event {
     /**
      * The medal of the champion (if any)
      */
-    @Column(name = "medaille", nullable = true)
+    @Column(name = "medaille")
     private String medaille;
 
     /**
@@ -131,7 +133,7 @@ public class Event {
      * @param champion name of the champion
      * @param medaille medal of the champion (if any)
      */
-    public Event(String nom, Character sexe, int age, int taille, int poids, String equipe, String cno, int annee, String saison, String ville, String champion, String medaille) {
+    public Event(String nom, Character sexe, int age, int taille, int poids, String equipe, String cno, Year annee, String saison, String ville, String champion, String medaille) {
         this.nom = nom;
         this.sexe = sexe;
         this.age = age;
@@ -295,7 +297,7 @@ public class Event {
      *
      * @param annee the year to set
      */
-    public void setAnnee(int annee) {
+    public void setAnnee(Year annee) {
         this.annee = annee;
     }
 
@@ -304,7 +306,7 @@ public class Event {
      *
      * @return the year
      */
-    public int getAnnee() {
+    public Year getAnnee() {
         return annee;
     }
 
