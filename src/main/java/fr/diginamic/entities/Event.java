@@ -441,4 +441,31 @@ public class Event {
     public void setEpreuve(Epreuve epreuve) {
         this.epreuve = epreuve;
     }
+
+    /**
+     * Returns a string representation of the Event.
+     *
+     * @return a string representation of the Event
+     */
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", champion='" + champion + '\'' +
+                ", sexe=" + sexe +
+                ", age=" + age +
+                ", taille=" + taille +
+                ", poids=" + poids +
+                ", equipe='" + equipe + '\'' +
+                ", cno='" + cno + '\'' +
+                ", annee=" + annee +
+                ", saison='" + saison + '\'' +
+                ", ville='" + ville + '\'' +
+                ", medaille='" + medaille + '\'' +
+                ", organisation=" + organisation +
+                ", sport=" + sport +
+                ", epreuve=" + epreuve +
+                '}';
+    }
 }

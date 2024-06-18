@@ -1,6 +1,8 @@
 package fr.diginamic.utils;
 
+import fr.diginamic.daos.EpreuveDao;
 import fr.diginamic.daos.EventDao;
+import fr.diginamic.daos.OrganisationDao;
 import fr.diginamic.daos.SportDao;
 import fr.diginamic.database.Connection;
 
@@ -65,9 +67,19 @@ public class Menu {
     private static final SportDao sportDao = Connection.sportDao;
 
     /**
+     * {@link EpreuveDao} epreuveDao
+     */
+    private static final EpreuveDao epreuveDao = Connection.epreuveDao;
+
+    /**
      * {@link EventDao} eventDao
      */
     private static final EventDao eventDao = Connection.eventDao;
+
+    /**
+     * {@link OrganisationDao} organisationDao
+     */
+    private static final OrganisationDao organisationDao = Connection.organisationDao;
 
     /**
      * {@link Scanner} scanner
@@ -124,8 +136,6 @@ public class Menu {
         do {
             System.out.println("***** Gestion des sports *****");
             System.out.println("1. Lister les sports");
-            System.out.println("2. Ajouter un sport");
-            System.out.println("3. Supprimer un sport");
             System.out.println("99. Retour au menu principal");
             choice = scanner.nextInt();
 
@@ -134,12 +144,8 @@ public class Menu {
                     System.out.println("Liste des sports");
                     sportDao.findAll().forEach(System.out::println);
                     break;
-                case 2:
-                    System.out.println("Ajout d'un sport");
-                    break;
-                case 3:
-                    System.out.println("Suppression d'un sport");
-                    break;
+                case 99:
+                    return; // Exit the method when 99 is entered
                 default:
                     System.out.println("Choix invalide");
             }
@@ -154,21 +160,16 @@ public class Menu {
         do {
             System.out.println("***** Gestion des épreuves *****");
             System.out.println("1. Lister les épreuves");
-            System.out.println("2. Ajouter une épreuve");
-            System.out.println("3. Supprimer une épreuve");
             System.out.println("99. Retour au menu principal");
             choice = scanner.nextInt();
 
             switch (choice) {
                 case 1:
                     System.out.println("Liste des épreuves");
+                    epreuveDao.findAll().forEach(System.out::println);
                     break;
-                case 2:
-                    System.out.println("Ajout d'une épreuve");
-                    break;
-                case 3:
-                    System.out.println("Suppression d'une épreuve");
-                    break;
+                case 99:
+                    return; // Exit the method when 99 is entered
                 default:
                     System.out.println("Choix invalide");
             }
@@ -183,21 +184,16 @@ public class Menu {
         do {
             System.out.println("***** Gestion des organisations *****");
             System.out.println("1. Lister les organisations");
-            System.out.println("2. Ajouter une organisation");
-            System.out.println("3. Supprimer une organisation");
             System.out.println("99. Retour au menu principal");
             choice = scanner.nextInt();
 
             switch (choice) {
                 case 1:
                     System.out.println("Liste des organisations");
+                    organisationDao.findAll().forEach(System.out::println);
                     break;
-                case 2:
-                    System.out.println("Ajout d'une organisation");
-                    break;
-                case 3:
-                    System.out.println("Suppression d'une organisation");
-                    break;
+                case 99:
+                    return; // Exit the method when 99 is entered
                 default:
                     System.out.println("Choix invalide");
             }
@@ -212,36 +208,31 @@ public class Menu {
         do {
             System.out.println("***** Gestion des événements *****");
             System.out.println("1. Lister les événements");
-            System.out.println("2. Ajouter un événement");
-            System.out.println("3. Supprimer un événement");
-            System.out.println("4. Lister les médailles triées par année");
-            System.out.println("5. Lister les médailles par sport");
-            System.out.println("6. Lister les médailles par sport et épreuve");
+            System.out.println("2. Lister les médailles triées par année");
+            System.out.println("3. Lister les médailles par sport");
+            System.out.println("4. Lister les médailles par sport et épreuve");
             System.out.println("99. Retour au menu principal");
             choice = scanner.nextInt();
 
             switch (choice) {
                 case 1:
                     System.out.println("Liste des événements");
+                    eventDao.findAll().forEach(System.out::println);
                     break;
                 case 2:
-                    System.out.println("Ajout d'un événement");
-                    break;
-                case 3:
-                    System.out.println("Suppression d'un événement");
-                    break;
-                case 4:
                     System.out.println("Liste des médailles triées par année");
                     eventDao.getMedalsOrderByYear().forEach(System.out::println);
                     break;
-                case 5:
+                case 3:
                     System.out.println("Liste des médailles par sport");
                     eventDao.getMedalsGroupBySport().forEach((key, value) -> System.out.println(key + " : " + value));
                     break;
-                case 6:
+                case 4:
                     System.out.println("Liste des médailles par sport et épreuve");
                     eventDao.getMedalsGroupBySportAndEpreuve().forEach((key, value) -> System.out.println(key + " : " + value));
                     break;
+                case 99:
+                    return; // Exit the method when 99 is entered
                 default:
                     System.out.println("Choix invalide");
             }
